@@ -1,0 +1,3 @@
+COL1 char
+COL3 int FK REFERENCES table
+
