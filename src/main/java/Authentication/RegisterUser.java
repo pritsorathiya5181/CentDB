@@ -8,14 +8,34 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class RegisterUser {
+
+    public UserModel RegisteringUser;
+
     public boolean register() throws NoSuchAlgorithmException {
+
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Enter credential for user");
+        System.out.println("Enter email");
+        String email = sc.next();
+
         System.out.println("Enter username");
         String username = sc.next();
+
         System.out.println("Enter password");
         String password = sc.next();
+
+        System.out.println("Confirm password");
+        String confirmPassword = sc.next();
+
+        // CURSOR
+//        System.out.println("Choose one from given Security questions");
+//        String securityQuestion = sc.next();
+
+        if(!password.equals(confirmPassword)){
+            System.out.println("both the password should be same, please re enter the form.");
+            return false;
+        }
 
         if (username == null || password == null) {
             System.out.println("Please re-enter username and password.");
@@ -41,7 +61,11 @@ public class RegisterUser {
 
                 fw = new FileWriter(fileLocation.USER_CREDENTIAL_PATH, true);
             }
-            fw.write(username+";"+hashedPassword+"\n");
+
+            this.RegisteringUser = new UserModel(username,password,email,"dummy security","dummy answer");
+
+            String toBeWritten = String.format("%s;%s;%s\n",username,email,password);
+            fw.write(toBeWritten);
             fw.close();
 
             return true;

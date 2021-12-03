@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 public class SystemOptions {
+
     public static void main(String[] args) throws NoSuchAlgorithmException, FileNotFoundException {
+        UserModel activeUser=null;
         System.out.println("Welcome!");
         while (true){
             System.out.println("1. Register User");
@@ -23,6 +25,7 @@ public class SystemOptions {
                     RegisterUser registerUser = new RegisterUser();
                     boolean register = registerUser.register();
                     if(register) {
+                        activeUser = registerUser.RegisteringUser;
                         System.out.println("Registered Successfully");
                     } else {
                         System.out.println("Please enter valid user credential");
@@ -33,6 +36,7 @@ public class SystemOptions {
                     boolean login = loginUser.login();
                     if(login) {
                         System.out.println("User logged in");
+                        activeUser = loginUser.LoginUser;
                         QueryOptions options = new QueryOptions();
                         options.listQueryOptions();
                     } else {
