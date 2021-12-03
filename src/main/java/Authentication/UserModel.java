@@ -1,21 +1,13 @@
 package Authentication;
 
 public class UserModel {
-    String username;
-    String password;
-    String email;
-    String SecurityQuestion;
-    String SecurityAnswer;
+    private String username;
+    private String password;
+    private String email;
+    private String SecurityQuestion;
+    private String SecurityAnswer;
 
-
-    public UserModel(String username, String password, String email, String securityQuestion, String securityAnswer) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        SecurityQuestion = securityQuestion;
-        SecurityAnswer = securityAnswer;
-    }
-
+    public UserModel() {}
 
     public void setUsername(String username) {
         this.username = username;

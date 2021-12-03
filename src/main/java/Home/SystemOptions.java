@@ -40,7 +40,7 @@ public class SystemOptions {
                         QueryOptions options = new QueryOptions();
                         options.listQueryOptions();
                     } else {
-                        System.out.println("Please enter valid username or password");
+                        System.out.println("Invalid credentials");
                     }
                 }
                 case 3 -> System.exit(0);
