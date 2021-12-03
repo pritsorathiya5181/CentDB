@@ -6,14 +6,18 @@ public class UserModel {
     String email;
     String SecurityQuestion;
     String SecurityAnswer;
-
-
-    public UserModel(String username, String password, String email, String securityQuestion, String securityAnswer) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        SecurityQuestion = securityQuestion;
-        SecurityAnswer = securityAnswer;
+    
+    private static UserModel instance = null;
+    
+    public static UserModel getinstance() {
+    	if(instance == null) {
+    		instance = new UserModel();
+    	}
+    	return instance;
+    }
+    
+    public UserModel() {
+    	
     }
 
 

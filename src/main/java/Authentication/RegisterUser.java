@@ -61,9 +61,11 @@ public class RegisterUser {
 
                 fw = new FileWriter(fileLocation.USER_CREDENTIAL_PATH, true);
             }
-
-            this.RegisteringUser = new UserModel(username,password,email,"dummy security","dummy answer");
-
+            
+            UserModel.getinstance().setUsername(username);
+            UserModel.getinstance().setPassword(hashedPassword);
+            UserModel.getinstance().setEmail(email);
+            
             String toBeWritten = String.format("%s;%s;%s\n",username,email,password);
             fw.write(toBeWritten);
             fw.close();

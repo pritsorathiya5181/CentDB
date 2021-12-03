@@ -27,8 +27,8 @@ public class LoginUser {
                 return hashedPassword.equals(data.split(";")[1]);
             }
         }
-        this.LoginUser = new UserModel(username,password,"email","dummy security","dummy answer");
-
+        UserModel.getinstance().setUsername(username);
+        UserModel.getinstance().setPassword(password);
         return false;
     }
 }
