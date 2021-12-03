@@ -17,7 +17,17 @@ public class queryRegex {
     public static String INSERT_VALUES_QUERY = "\\sVALUES\\s\\(([\\s\\S]+)\\);";
     public static final Pattern INSERT_QUERY_FINAL = Pattern.compile(INSERT_QUERY_OUTER+INSERT_VALUES_QUERY);
 
-    public String SELECT_QUERY_OUTER = "SELECT\\s((\\*)?((\\w+)?((,(\\w+))*)?))\\sFROM\\s(\\w+)";
-    public String SELECT_QUERY_CONDITION = "(\\sWHERE\\s(\\w+)=(\\w+))?;";
-    public Pattern SELECT_QUERY_FINAL = Pattern.compile(SELECT_QUERY_OUTER+SELECT_QUERY_CONDITION);
+    public static String SELECT_QUERY_OUTER = "SELECT\\s((\\*)?((\\w+)?((,(\\w+))*)?))\\sFROM\\s(\\w+)";
+    public static String SELECT_QUERY_CONDITION = "(\\sWHERE\\s(\\w+)=(\\w+))?;";
+    public static final Pattern SELECT_QUERY_FINAL = Pattern.compile(SELECT_QUERY_OUTER+SELECT_QUERY_CONDITION);
+
+    public static String UPDATE_QUERY_OUTER = "UPDATE\\s(\\w+)\\sSET\\s(((\\w+)=(\\w+))(,\\s((\\w+)=(\\w+)))*)";
+    public static String UPDATE_QUERY_CONDITION = "\\sWHERE\\s((\\w+)=(\\w+));";
+    public static final Pattern UPDATE_QUERY_FINAL = Pattern.compile(UPDATE_QUERY_OUTER+UPDATE_QUERY_CONDITION);
+
+    public static String TRUNCATE_QUERY = "TRUNCATE TABLE\\s(\\w+);";
+    public static Pattern TRUNCATE_QUERY_FINAL = Pattern.compile(TRUNCATE_QUERY);
+
+    public static String DROP_QUERY_OUTER = "DROP TABLE\\s(\\w+);";
+    public static Pattern DROP_QUERY_FINAL = Pattern.compile(DROP_QUERY_OUTER);
 }

@@ -1,14 +1,12 @@
 package Home;
 
-import Authentication.LoginUser;
-import Authentication.RegisterUser;
-import Query.QueryOptions;
 
-import java.io.File;
+import Authentication.*;
+import Query.*;
+
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
-
 public class SystemOptions {
     public static void main(String[] args) throws NoSuchAlgorithmException, FileNotFoundException {
         System.out.println("Welcome!");

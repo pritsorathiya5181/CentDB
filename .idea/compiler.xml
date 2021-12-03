@@ -9,5 +9,8 @@
         <module name="CentDB" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="CentDB" target="16" />
+    </bytecodeTargetLevel>
   </component>
 </project>
