@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class LoginUser {
+    public UserModel LoginUser;
     public boolean login() throws FileNotFoundException, NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);
 
@@ -26,6 +27,8 @@ public class LoginUser {
                 return hashedPassword.equals(data.split(";")[1]);
             }
         }
+        this.LoginUser = new UserModel(username,password,"email","dummy security","dummy answer");
+
         return false;
     }
 }
