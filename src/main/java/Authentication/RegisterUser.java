@@ -1,12 +1,11 @@
 package Authentication;
 
+import Constants.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
-
-import static Constants.fileLocation.USER_CREDENTIAL_PATH;
 
 public class RegisterUser {
     public boolean register() throws NoSuchAlgorithmException {
@@ -23,13 +22,13 @@ public class RegisterUser {
             return false;
         }
 
-        File myFile = new File(USER_CREDENTIAL_PATH);
+        File myFile = new File(fileLocation.USER_CREDENTIAL_PATH);
         final String hashedPassword = HashAlgorithm.toHexString(HashAlgorithm.getSHA(password));
         FileWriter fw;
 
         try {
             if (myFile.createNewFile()) {
-                fw = new FileWriter(USER_CREDENTIAL_PATH);
+                fw = new FileWriter(fileLocation.USER_CREDENTIAL_PATH);
             } else {
                 Scanner fileReader = new Scanner(myFile);
                 while (fileReader.hasNextLine()){
@@ -40,7 +39,7 @@ public class RegisterUser {
                     }
                 }
 
-                fw = new FileWriter(USER_CREDENTIAL_PATH, true);
+                fw = new FileWriter(fileLocation.USER_CREDENTIAL_PATH, true);
             }
             fw.write(username+";"+hashedPassword+"\n");
             fw.close();

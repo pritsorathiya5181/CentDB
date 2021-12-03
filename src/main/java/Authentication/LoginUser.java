@@ -1,11 +1,11 @@
 package Authentication;
 
+import Constants.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
-
-import static Constants.fileLocation.USER_CREDENTIAL_PATH;
 
 public class LoginUser {
     public boolean login() throws FileNotFoundException, NoSuchAlgorithmException {
@@ -17,7 +17,7 @@ public class LoginUser {
         System.out.println("Enter password");
         String password = sc.next();
 
-        File myFile = new File(USER_CREDENTIAL_PATH);
+        File myFile = new File(fileLocation.USER_CREDENTIAL_PATH);
         Scanner fileReader = new Scanner(myFile);
         while (fileReader.hasNextLine()){
             String data = fileReader.nextLine();
