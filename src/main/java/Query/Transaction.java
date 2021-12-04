@@ -64,11 +64,8 @@ public class Transaction {
 		QueryParser parser = new QueryParser();
 		DatabaseOperation dbOperation = new DatabaseOperation();
 		
-		System.out.println(transactionQueryList);
-		System.out.println();
-		
 		for(String query: transactionQueryList) {
-			System.out.println(query);
+
 			Matcher createMatcher = CREATE_QUERY_FINAL.matcher(query);
             Matcher createDatabaseMatcher = DATABASE_CREATE_FINAL.matcher(query);
             Matcher useDatabaseMatcher = DATABASE_USE_FINAL.matcher(query);
