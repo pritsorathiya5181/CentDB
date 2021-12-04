@@ -30,4 +30,13 @@ public class queryRegex {
 
     public static String DROP_QUERY_OUTER = "DROP TABLE\\s(\\w+);";
     public static Pattern DROP_QUERY_FINAL = Pattern.compile(DROP_QUERY_OUTER);
+    
+    public static String BEGIN_TRANSACTION_QUERY ="BEGIN TRANSACTION;";
+    public static Pattern BEGIN_TRANSACTION_QUERY_FINAL=Pattern.compile(BEGIN_TRANSACTION_QUERY);
+    
+    public static String COMMIT_TRANSACTION_QUERY="COMMIT;";
+    public static Pattern COMMIT_TRANSACTION_QUERY_FINAL=Pattern.compile(COMMIT_TRANSACTION_QUERY);
+    
+    public static String ROLLBACK_TRANSACTION_QUERY="ROLLBACK;";
+    public static Pattern ROLLBACK_TRANSACTION_QUERY_FINAL=Pattern.compile(ROLLBACK_TRANSACTION_QUERY);
 }

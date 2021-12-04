@@ -300,10 +300,11 @@ public class TableOperation {
     }
 }
 
+//   USE <DATABASE NAME>
 //   CREATE TABLE Customers (CustomerName int,ContactName varchar(255),Address varchar(255),City varchar(255),PostalCode varchar(255),Country varchar(255));
 //   SELECT * FROM Customers;
 //   INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country) VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
 //   INSERT INTO Person (pName, pId, pAdd) VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21');
-//   UPDATE Customers SET Country=India WHERE CustomerName='Cardinal';
+//   UPDATE Customers SET Country=India WHERE CustomerName=Cardinal;
 //   TRUNCATE TABLE Customers;
 //   DROP TABLE Customers;
