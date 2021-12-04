@@ -3,7 +3,6 @@ package Query;
 import Constants.fileLocation;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -19,25 +18,30 @@ public class TableOperation {
             }
             FileWriter fileWriter = new FileWriter(dictionaryFile, true);
 
-            fileWriter.append(tableName);
-            fileWriter.append(" ");
-            for (int i = 0; i < colName.size(); i++) {
-                fileWriter.append(colName.get(i).strip());
-                fileWriter.append(" ");
-                fileWriter.append(colValue.get(i).strip());
-                fileWriter.append(" ");
-                if (keySet.containsKey(colName.get(i))) {
-                    fileWriter.append((keySet.get(colName.get(i))));
-                    fileWriter.append(" ");
-                }
-//                fileWriter.append("\n");
-            }
-            fileWriter.append("\n");
-            fileWriter.close();
-
             File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
-            tableFile.createNewFile();
-            return true;
+            if (tableFile.createNewFile()) {
+                fileWriter.append(tableName);
+                fileWriter.append(" ");
+                for (int i = 0; i < colName.size(); i++) {
+                    fileWriter.append(colName.get(i).strip());
+                    fileWriter.append(" ");
+                    fileWriter.append(colValue.get(i).strip());
+                    fileWriter.append(" ");
+                    if (keySet.containsKey(colName.get(i))) {
+                        fileWriter.append((keySet.get(colName.get(i))));
+                        fileWriter.append(" ");
+                    }
+//                fileWriter.append("\n");
+                }
+                fileWriter.append("\n");
+                fileWriter.close();
+                return true;
+            } else {
+                System.out.println(tableName + " table is already exist");
+                return false;
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -183,7 +187,6 @@ public class TableOperation {
                     System.out.println("\n");
                 }
             }
-
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -244,13 +247,51 @@ public class TableOperation {
         }
     }
 
+    public boolean delete(String dbName, String tableName, String conditionColumns, String clmValues) {
+        File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
+        String conditionValues = "'" + clmValues + "'";
+
+        if (!tableFile.exists()) {
+            System.out.println("Table Doesn't exist");
+            return false;
+        }
+        try {
+            Scanner myReader = new Scanner(tableFile);
+            Map<String, ArrayList<String>> records = getRecords(myReader);
+
+            FileWriter writer = new FileWriter(tableFile, false);
+            ArrayList<String> temp;
+            System.out.println("records=="+records+"en=="+records.entrySet());
+            for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
+                StringBuilder record = new StringBuilder();
+                System.out.println("eee==="+ee);
+                boolean hasKey = ee.getKey().equals(conditionColumns);
+                boolean hasValue = ee.getValue().contains(conditionValues);
+                System.out.println("eee==="+hasValue+"==="+hasKey);
+                if (!(hasKey && hasValue)) {
+                    temp = ee.getValue();
+                    for (String s : temp) {
+                        record.append(s).append("\n");
+                    }
+                    writer.write(record.toString());
+                    writer.flush();
+                    writer.write("\n");
+                    writer.flush();
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean truncate(String dbName, String tableName) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         if (!tableFile.exists()) {
             System.out.println("Table Doesn't exist");
             return false;
         }
-
         try {
             FileWriter writer = new FileWriter(tableFile, false);
             System.out.println("Table Truncated successfully");
@@ -270,7 +311,7 @@ public class TableOperation {
             boolean deleteStatus = tableFile.delete();
 
         }
-        File dataDictionaryFile = new File(fileLocation.LOCAL_PATH  + "/" + dbName + "/" + "dataDictionary.txt");
+        File dataDictionaryFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + "dataDictionary.txt");
         try {
             Scanner myReader = new Scanner(dataDictionaryFile);
             Map<String, ArrayList<String>> records = getRecords(myReader);
@@ -291,12 +332,11 @@ public class TableOperation {
                     writer.flush();
                 }
             }
-            System.out.println("table Dropped successfully");
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 }
 
@@ -304,6 +344,9 @@ public class TableOperation {
 //   SELECT * FROM Customers;
 //   INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country) VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
 //   INSERT INTO Person (pName, pId, pAdd) VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21');
-//   UPDATE Customers SET Country=India WHERE CustomerName='Cardinal';
+//   UPDATE Customers SET Country=India WHERE CustomerName=Cardinal;
 //   TRUNCATE TABLE Customers;
 //   DROP TABLE Customers;
+//   CREATE TABLE student_information (student_id int PK,first_name char FK,last_name char,contact_number char REFERENCES grade student_id);
+//   INSERT INTO student_information (student_id, first_name, contact_number) VALUES ('b0090100', 'Mark', '902985275');
+//   DELETE FROM Customers WHERE CustomerName=Cardinal;

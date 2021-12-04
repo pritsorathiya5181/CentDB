@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca8f9e90-cc47-494e-aa44-135c898dce78" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CentDB.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CentDB.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Authentication/userCredential.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Authentication/userCredential.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/LoginUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/LoginUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/Person.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/dataDictionary.txt" beforeDir="false" afterPath="$PROJECT_DIR$/prit/dataDictionary.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Constants/queryRegex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants/queryRegex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Query/QueryOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/QueryOptions.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +38,14 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProblemsViewState">
     <option name="selectedIndex" value="2" />
@@ -84,6 +94,8 @@
       <workItem from="1638561551422" duration="84000" />
       <workItem from="1638561665789" duration="25000" />
       <workItem from="1638561729381" duration="717000" />
+      <workItem from="1638635259891" duration="505000" />
+      <workItem from="1638638441275" duration="7973000" />
     </task>
     <servers />
   </component>
@@ -103,6 +115,25 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/QueryParser.java</url>
+          <line>163</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/QueryParser.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/QueryParser.java</url>
+          <line>166</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />

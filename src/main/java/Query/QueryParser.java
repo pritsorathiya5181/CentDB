@@ -19,6 +19,7 @@ public class QueryParser {
         Matcher insertMatcher = INSERT_QUERY_FINAL.matcher(query);
         Matcher selectMatcher = SELECT_QUERY_FINAL.matcher(query);
         Matcher updateMatcher = UPDATE_QUERY_FINAL.matcher(query);
+        Matcher deleteMatcher = DELETE_QUERY_FINAL.matcher(query);
         Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
         Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
 
@@ -31,13 +32,15 @@ public class QueryParser {
             createTable(createMatcher);
         } else if (insertMatcher.find()) {
             insertTable(insertMatcher);
-        } else if(selectMatcher.find()) {
+        } else if (selectMatcher.find()) {
             selectTable(selectMatcher);
-        } else if(updateMatcher.find())  {
+        } else if (updateMatcher.find()) {
             updateTable(updateMatcher);
-        } else if(truncateMatcher.find()) {
+        } else if (deleteMatcher.find()) {
+            deleteTable(deleteMatcher);
+        } else if (truncateMatcher.find()) {
             truncateTable(truncateMatcher);
-        } else if(dropMatcher.find()) {
+        } else if (dropMatcher.find()) {
             dropTable(dropMatcher);
         } else {
             System.out.println("Please enter a valid query");
@@ -61,34 +64,34 @@ public class QueryParser {
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 
-        for (String columnValue :colValSet) {
+        for (String columnValue : colValSet) {
             String[] set = columnValue.split(" ");
             columns.add(set[0].strip());
             values.add(set[1].strip());
-            if(set.length == 3) {
-                if(set[2].strip().equals("PK")) {
+            if (set.length == 3) {
+                if (set[2].strip().equals("PK")) {
                     keySet.put(set[0].strip(), "PK");
                 }
-            } else if(set.length > 3) {
-                keySet.put(set[0].strip(), set[2].strip()+" "+set[3].strip()+" "+set[4].strip());
+            } else if (set.length > 3) {
+                keySet.put(set[0].strip(), set[2].strip() + " " + set[3].strip() + " " + set[4].strip());
             }
         }
 
         TableOperation tableOperation = new TableOperation();
-        if(dbOperation.getCurrentDatabase() != null) {
+        if (dbOperation.getCurrentDatabase() != null) {
             boolean status = tableOperation.createTable(dbOperation.getCurrentDatabase(), tableName, columns, values, keySet);
-            if(status) {
-                System.out.println("Successfully creation of new table: "+tableName+" in database: "+dbOperation.getCurrentDatabase());
+            if (status) {
+                System.out.println("Successfully creation of new table: " + tableName + " in database: " + dbOperation.getCurrentDatabase());
             } else {
-                System.out.println("Failure creation of new table: "+tableName+" in database: "+dbOperation.getCurrentDatabase());
+                System.out.println("Failure creation of new table: " + tableName + " in database: " + dbOperation.getCurrentDatabase());
             }
         } else {
             System.out.println("Please select database");
         }
     }
 
-    public void insertTable(Matcher insertMatcher){
-        System.out.println("Query Matched: "+ insertMatcher.group(1)+" == "+insertMatcher.group(2) + " == " + insertMatcher.group(3));
+    public void insertTable(Matcher insertMatcher) {
+        System.out.println("Query Matched: " + insertMatcher.group(1) + " == " + insertMatcher.group(2) + " == " + insertMatcher.group(3));
         String tableName = insertMatcher.group(1);
 
         String columnSet = insertMatcher.group(2);
@@ -103,31 +106,35 @@ public class QueryParser {
         TableOperation tableOperation = new TableOperation();
         boolean status = tableOperation.insert(dbOperation.getCurrentDatabase(), tableName, columns, values);
 
-        if(status) {
+        if (status) {
             System.out.println("Successfully inserted into the table");
         } else {
-            System.out.println("Failure insertion of new entry in: "+tableName+" table");
+            System.out.println("Failure insertion of new entry in: " + tableName + " table");
         }
     }
 
     public void selectTable(Matcher selectMatcher) {
-        String tableName=selectMatcher.group(8);
+        String tableName = selectMatcher.group(8);
         String tableSet = selectMatcher.group(1);
         String[] colValSet = tableSet.split(",");
         ArrayList<String> columns = new ArrayList<>(Arrays.asList(colValSet));
-        String conditionColumns=selectMatcher.group(10);
-        String conditionValues=selectMatcher.group(11);
+        String conditionColumns = selectMatcher.group(10);
+        String conditionValues = selectMatcher.group(11);
         TableOperation tableOperation = new TableOperation();
 
-        boolean status = tableOperation.select(dbOperation.getCurrentDatabase(),tableName,columns,conditionColumns,conditionValues);
+        boolean status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns, conditionValues);
 
-        System.out.println("hello==="+tableName+"--"+tableSet+"---"+conditionColumns+"==="+conditionValues);
+        if (status) {
+            System.out.println("Successfully performed select query on the " + tableName + " table");
+        } else {
+            System.out.println("Failure to perform selection query on the " + tableName + " table");
+        }
     }
 
     public void updateTable(Matcher updateMatcher) {
         String tableName = updateMatcher.group(1);
         String tableSet = updateMatcher.group(2);
-        String conditionSet = updateMatcher .group(10);
+        String conditionSet = updateMatcher.group(10);
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 
@@ -145,6 +152,28 @@ public class QueryParser {
 
         TableOperation tableOperation = new TableOperation();
         boolean status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values, conditionColumns, conditionValues);
+
+        if (status) {
+            System.out.println("Successfully updated into the table");
+        } else {
+            System.out.println("Failure updating of new entry in: " + tableName + " table");
+        }
+    }
+
+    public void deleteTable(Matcher deleMatcher) {
+        System.out.println("count==="+deleMatcher.groupCount());
+        String tableName = deleMatcher.group(1);
+        String conditionColumn = deleMatcher.group(3);
+        String conditionValue = deleMatcher.group(4);
+
+        TableOperation tableOperation = new TableOperation();
+        boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn, conditionValue);
+
+        if (status) {
+            System.out.println("Successfully deleted entry from the table");
+        } else {
+            System.out.println("Failure deleting of new entry in: " + tableName + " table");
+        }
     }
 
     public void truncateTable(Matcher truncateMatcher) {
@@ -152,6 +181,12 @@ public class QueryParser {
 
         TableOperation tableOperation = new TableOperation();
         boolean status = tableOperation.truncate(dbOperation.getCurrentDatabase(), tableName);
+
+        if(status) {
+            System.out.println("Successfully truncated the "+ tableName +" table");
+        } else {
+            System.out.println("Failure to truncate the : "+tableName+" table");
+        }
     }
 
     public void dropTable(Matcher dropMatcher) {
@@ -159,5 +194,11 @@ public class QueryParser {
 
         TableOperation tableOperation = new TableOperation();
         boolean status = tableOperation.drop(dbOperation.getCurrentDatabase(), tableName);
+
+        if(status) {
+            System.out.println("Successfully dropped the table");
+        } else {
+            System.out.println("Failure to drop the "+tableName+" table");
+        }
     }
 }

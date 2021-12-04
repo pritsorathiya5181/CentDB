@@ -25,6 +25,10 @@ public class queryRegex {
     public static String UPDATE_QUERY_CONDITION = "\\sWHERE\\s((\\w+)=(\\w+));";
     public static final Pattern UPDATE_QUERY_FINAL = Pattern.compile(UPDATE_QUERY_OUTER+UPDATE_QUERY_CONDITION);
 
+    public static String DELETE_QUERY_OUTER = "DELETE FROM\\s(\\w+)";
+    public static String DELETE_QUERY_CONDITION = "\\sWHERE\\s((\\w+)=(\\w+));";
+    public static Pattern DELETE_QUERY_FINAL = Pattern.compile(DELETE_QUERY_OUTER + DELETE_QUERY_CONDITION);
+
     public static String TRUNCATE_QUERY = "TRUNCATE TABLE\\s(\\w+);";
     public static Pattern TRUNCATE_QUERY_FINAL = Pattern.compile(TRUNCATE_QUERY);
 

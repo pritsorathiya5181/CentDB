@@ -1,0 +1,8 @@
+varchar(255) City varchar(255) PostalCode varchar(255) Country varchar(255)
+
+lastname char contactnumber char
+last_name char contact_number char REFERENCES grade student_id
+
+Address varchar(255) City varchar(255) PostalCode varchar(255) Country varchar(255)
+
+Customers CustomerName int ContactName varchar(255) Address varchar(255) City varchar(255) PostalCode varchar(255) Country varchar(255) 
