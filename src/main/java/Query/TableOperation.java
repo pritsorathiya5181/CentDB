@@ -271,6 +271,21 @@ public class TableOperation {
 //                    writer.flush();
 //                }
 //            }
+            Set<String> columnList = records.keySet();
+//            System.out.println(columnList.toArray()[0]);
+            for (int i = 0; i < records.get(columnList.toArray()[0]).size(); i++) {
+                for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
+                    boolean hasKey = ee.getKey().equals(conditionColumns);
+                    boolean hasValue = ee.getValue().get(i).equals(conditionValues);
+
+                    if (!(hasKey && hasValue)) {
+                        String record = ee.getKey() + " " + ee.getValue().get(i) + "\n";
+                        writer.write(record);
+                        writer.flush();
+                    }
+                }
+                System.out.println("\n");
+            }
 
             return true;
         } catch (IOException e) {

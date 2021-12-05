@@ -6,16 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ca8f9e90-cc47-494e-aa44-135c898dce78" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jay/Customers.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jay/dataDictionary.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prit/Customers.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prit/dataDictionary.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Query/QueryOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/QueryOptions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/Customers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/prit/Customers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Query/QueryOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/QueryOptions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Query/QueryParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/QueryParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Query/TableOperation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/TableOperation.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +113,9 @@
       <workItem from="1638729527380" duration="128000" />
       <workItem from="1638729663672" duration="186000" />
       <workItem from="1638729861099" duration="1438000" />
-      <workItem from="1638731612218" duration="64000" />
+      <workItem from="1638731612218" duration="427000" />
+      <workItem from="1638732069523" duration="11000" />
+      <workItem from="1638735158332" duration="2052000" />
     </task>
     <servers />
   </component>
