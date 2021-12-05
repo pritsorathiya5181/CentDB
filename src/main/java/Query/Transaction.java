@@ -30,13 +30,14 @@ public class Transaction {
                 Matcher insertMatcher = INSERT_QUERY_FINAL.matcher(query);
                 Matcher selectMatcher = SELECT_QUERY_FINAL.matcher(query);
                 Matcher updateMatcher = UPDATE_QUERY_FINAL.matcher(query);
+                Matcher deleteMatcher = DELETE_QUERY_FINAL.matcher(query);
                 Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
                 Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
                 Matcher commitTransactionMatcher = COMMIT_TRANSACTION_QUERY_FINAL.matcher(query);
                 Matcher rollbackTransactionMatcher =ROLLBACK_TRANSACTION_QUERY_FINAL.matcher(query);
                 
                 if (createDatabaseMatcher.find() || useDatabaseMatcher.find() || createMatcher.find() || insertMatcher.find() ||
-                		selectMatcher.find() || updateMatcher.find() || truncateMatcher.find() || dropMatcher.find()) {
+                		selectMatcher.find() || deleteMatcher.find() || updateMatcher.find() || truncateMatcher.find() || dropMatcher.find()) {
                 	transactionQueryList.add(query);
                 } 
                 else if(commitTransactionMatcher.find()) {
@@ -72,6 +73,7 @@ public class Transaction {
             Matcher insertMatcher = INSERT_QUERY_FINAL.matcher(query);
             Matcher selectMatcher = SELECT_QUERY_FINAL.matcher(query);
             Matcher updateMatcher = UPDATE_QUERY_FINAL.matcher(query);
+            Matcher deleteMatcher = DELETE_QUERY_FINAL.matcher(query);
             Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
             Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
             
@@ -83,16 +85,60 @@ public class Transaction {
 	        } else if (createMatcher.find()) {
 	            parser.createTable(createMatcher);
 	        } else if (insertMatcher.find()) {
-	            parser.insertTable(insertMatcher);
+	        	String tableName = insertMatcher.group(1);
+	        	if(!Lock.checkLock(tableName)) {
+	        		Lock.addLock(tableName);
+	        		parser.insertTable(insertMatcher);
+	        		Lock.removeLock(tableName);
+	        	}
+	        	else {
+	        		System.out.println("Table Locked. Try again after sometime..");
+	    
+	        	}
 	        } else if(selectMatcher.find()) {
 	            parser.selectTable(selectMatcher);
 	        } else if(updateMatcher.find())  {
-	            parser.updateTable(updateMatcher);
-	        } else if(truncateMatcher.find()) {
-	            parser.truncateTable(truncateMatcher);
-	        } else if(dropMatcher.find()) {
-	            parser.dropTable(dropMatcher);
+	        	String tableName = updateMatcher.group(1);
+	        	if(!Lock.checkLock(tableName)){
+	        		Lock.addLock(tableName);
+	        		parser.updateTable(updateMatcher);
+	        		Lock.removeLock(tableName);
+	        	}
+	        	else {
+	        		System.out.println("Table Locked. Try again after sometime..");
+	        	}
+	        } else if (deleteMatcher.find()) {
+	        	String tableName = deleteMatcher.group(1);
+	        	if(!Lock.checkLock(tableName)){
+	        		Lock.addLock(tableName);
+	        		parser.deleteTable(deleteMatcher);
+	        		Lock.removeLock(tableName);
+	        	}
+	        	else {
+	        		System.out.println("Table Locked. Try again after sometime..");
+	        	}
 	        }
+	        else if (truncateMatcher.find()) {
+	        	String tableName = truncateMatcher.group(1);
+	        	if(!Lock.checkLock(tableName)){
+	        		Lock.addLock(tableName);
+	        		parser.truncateTable(truncateMatcher);
+	        		Lock.removeLock(tableName);
+	        	}
+	        	else {
+	        		System.out.println("Table Locked. Try again after sometime..");
+	        	}
+	        } else if (dropMatcher.find()) {
+	        	String tableName = dropMatcher.group(1);
+	        	if(!Lock.checkLock(tableName)){
+	        		Lock.addLock(tableName);
+	        		parser.dropTable(dropMatcher);
+	        		Lock.removeLock(tableName);
+	        	}
+	        	else {
+	        		System.out.println("Table Locked. Try again after sometime..");
+	        	}
+	        } 
 		}
 	}
 }

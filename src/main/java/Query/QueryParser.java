@@ -10,7 +10,6 @@ import static Constants.queryRegex.*;
 public class QueryParser {
     DatabaseOperation dbOperation = new DatabaseOperation();
     Transaction transaction = new Transaction();
-
     public void parseQuery(String query) {
         System.out.println("current database==" + dbOperation.getCurrentDatabase());
 
@@ -34,17 +33,58 @@ public class QueryParser {
         } else if (createMatcher.find()) {
             createTable(createMatcher);
         } else if (insertMatcher.find()) {
-            insertTable(insertMatcher);
+        	String tableName = insertMatcher.group(1);
+        	if(!Lock.checkLock(tableName)) {
+        		Lock.addLock(tableName);
+        		insertTable(insertMatcher);
+        		Lock.removeLock(tableName);
+        	}
+        	else {
+        		System.out.println("Table Locked. Try again after sometime..");
+    
+        	}
         } else if (selectMatcher.find()) {
             selectTable(selectMatcher);
         } else if (updateMatcher.find()) {
-            updateTable(updateMatcher);
+        	String tableName = updateMatcher.group(1);
+        	if(!Lock.checkLock(tableName)){
+        		Lock.addLock(tableName);
+        		updateTable(updateMatcher);
+        		Lock.removeLock(tableName);
+        	}
+        	else {
+        		System.out.println("Table Locked. Try again after sometime..");
+        	}
         } else if (deleteMatcher.find()) {
-            deleteTable(deleteMatcher);
+        	String tableName = deleteMatcher.group(1);
+        	if(!Lock.checkLock(tableName)){
+        		Lock.addLock(tableName);
+        		deleteTable(deleteMatcher);
+        		Lock.removeLock(tableName);
+        	}
+        	else {
+        		System.out.println("Table Locked. Try again after sometime..");
+        	}
         } else if (truncateMatcher.find()) {
-            truncateTable(truncateMatcher);
+        	String tableName = truncateMatcher.group(1);
+        	if(!Lock.checkLock(tableName)){
+        		Lock.addLock(tableName);
+        		truncateTable(truncateMatcher);
+        		Lock.removeLock(tableName);
+        	}
+        	else {
+        		System.out.println("Table Locked. Try again after sometime..");
+        	}
         } else if (dropMatcher.find()) {
-            dropTable(dropMatcher);
+        	String tableName = dropMatcher.group(1);
+        	if(!Lock.checkLock(tableName)){
+        		Lock.addLock(tableName);
+        		dropTable(dropMatcher);
+        		Lock.removeLock(tableName);
+        	}
+        	else {
+        		System.out.println("Table Locked. Try again after sometime..");
+        	}
         } else if(beginTransactionMatcher.find()){
         	Transaction transactionQuery = new Transaction();
         	System.out.println("Transaction Begins");
