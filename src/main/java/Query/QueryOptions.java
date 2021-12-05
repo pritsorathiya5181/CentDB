@@ -1,11 +1,13 @@
 package Query;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class QueryOptions {
     public void listQueryOptions() {
         Scanner sc = new Scanner(System.in);
         QueryParser qp = new QueryParser();
+        TableOperation tableOperation = new TableOperation();
 
         System.out.println("Please select the query operation that you want to perform");
 
@@ -25,6 +27,12 @@ public class QueryOptions {
                 }
                 case "2" -> {
                     System.out.println("Please enter database name");
+                    String dbName =  sc.nextLine();
+                    try {
+                        tableOperation.erd(dbName);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 case "3" -> System.exit(0);
             }

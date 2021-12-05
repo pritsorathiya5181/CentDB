@@ -10,6 +10,7 @@ import static Constants.queryRegex.*;
 public class QueryParser {
     DatabaseOperation dbOperation = new DatabaseOperation();
     Transaction transaction = new Transaction();
+
     public void parseQuery(String query) {
         System.out.println("current database==" + dbOperation.getCurrentDatabase());
 
@@ -22,7 +23,7 @@ public class QueryParser {
         Matcher deleteMatcher = DELETE_QUERY_FINAL.matcher(query);
         Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
         Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
-        Matcher beginTransactionMatcher =  BEGIN_TRANSACTION_QUERY_FINAL.matcher(query);
+        Matcher beginTransactionMatcher = BEGIN_TRANSACTION_QUERY_FINAL.matcher(query);
 
 
         if (createDatabaseMatcher.find()) {
@@ -33,63 +34,58 @@ public class QueryParser {
         } else if (createMatcher.find()) {
             createTable(createMatcher);
         } else if (insertMatcher.find()) {
-        	String tableName = insertMatcher.group(1);
-        	if(!Lock.checkLock(tableName)) {
-        		Lock.addLock(tableName);
-        		insertTable(insertMatcher);
-        		Lock.removeLock(tableName);
-        	}
-        	else {
-        		System.out.println("Table Locked. Try again after sometime..");
-    
-        	}
+            String tableName = insertMatcher.group(1);
+            if (!Lock.checkLock(tableName)) {
+                Lock.addLock(tableName);
+                insertTable(insertMatcher);
+                Lock.removeLock(tableName);
+            } else {
+                System.out.println("Table Locked. Try again after sometime..");
+
+            }
         } else if (selectMatcher.find()) {
             selectTable(selectMatcher);
         } else if (updateMatcher.find()) {
-        	String tableName = updateMatcher.group(1);
-        	if(!Lock.checkLock(tableName)){
-        		Lock.addLock(tableName);
-        		updateTable(updateMatcher);
-        		Lock.removeLock(tableName);
-        	}
-        	else {
-        		System.out.println("Table Locked. Try again after sometime..");
-        	}
+            String tableName = updateMatcher.group(1);
+            if (!Lock.checkLock(tableName)) {
+                Lock.addLock(tableName);
+                updateTable(updateMatcher);
+                Lock.removeLock(tableName);
+            } else {
+                System.out.println("Table Locked. Try again after sometime..");
+            }
         } else if (deleteMatcher.find()) {
-        	String tableName = deleteMatcher.group(1);
-        	if(!Lock.checkLock(tableName)){
-        		Lock.addLock(tableName);
-        		deleteTable(deleteMatcher);
-        		Lock.removeLock(tableName);
-        	}
-        	else {
-        		System.out.println("Table Locked. Try again after sometime..");
-        	}
+            String tableName = deleteMatcher.group(1);
+            if (!Lock.checkLock(tableName)) {
+                Lock.addLock(tableName);
+                deleteTable(deleteMatcher);
+                Lock.removeLock(tableName);
+            } else {
+                System.out.println("Table Locked. Try again after sometime..");
+            }
         } else if (truncateMatcher.find()) {
-        	String tableName = truncateMatcher.group(1);
-        	if(!Lock.checkLock(tableName)){
-        		Lock.addLock(tableName);
-        		truncateTable(truncateMatcher);
-        		Lock.removeLock(tableName);
-        	}
-        	else {
-        		System.out.println("Table Locked. Try again after sometime..");
-        	}
+            String tableName = truncateMatcher.group(1);
+            if (!Lock.checkLock(tableName)) {
+                Lock.addLock(tableName);
+                truncateTable(truncateMatcher);
+                Lock.removeLock(tableName);
+            } else {
+                System.out.println("Table Locked. Try again after sometime..");
+            }
         } else if (dropMatcher.find()) {
-        	String tableName = dropMatcher.group(1);
-        	if(!Lock.checkLock(tableName)){
-        		Lock.addLock(tableName);
-        		dropTable(dropMatcher);
-        		Lock.removeLock(tableName);
-        	}
-        	else {
-        		System.out.println("Table Locked. Try again after sometime..");
-        	}
-        } else if(beginTransactionMatcher.find()){
-        	Transaction transactionQuery = new Transaction();
-        	System.out.println("Transaction Begins");
-        	transactionQuery.processTransaction();
-        }else {
+            String tableName = dropMatcher.group(1);
+            if (!Lock.checkLock(tableName)) {
+                Lock.addLock(tableName);
+                dropTable(dropMatcher);
+                Lock.removeLock(tableName);
+            } else {
+                System.out.println("Table Locked. Try again after sometime..");
+            }
+        } else if (beginTransactionMatcher.find()) {
+            Transaction transactionQuery = new Transaction();
+            System.out.println("Transaction Begins");
+            transactionQuery.processTransaction();
+        } else {
             System.out.println("Please enter a valid query");
         }
     }
@@ -150,13 +146,17 @@ public class QueryParser {
         ArrayList<String> columns = new ArrayList<String>(Arrays.asList(cols));
         ArrayList<String> values = new ArrayList<String>(Arrays.asList(vals));
 
-        TableOperation tableOperation = new TableOperation();
-        boolean status = tableOperation.insert(dbOperation.getCurrentDatabase(), tableName, columns, values);
+        if (dbOperation.getCurrentDatabase() != null) {
+            TableOperation tableOperation = new TableOperation();
+            boolean status = tableOperation.insert(dbOperation.getCurrentDatabase(), tableName, columns, values);
 
-        if (status) {
-            System.out.println("Successfully inserted into the table");
+            if (status) {
+                System.out.println("Successfully inserted into the table");
+            } else {
+                System.out.println("Failure insertion of new entry in: " + tableName + " table");
+            }
         } else {
-            System.out.println("Failure insertion of new entry in: " + tableName + " table");
+            System.out.println("Please select database");
         }
     }
 
@@ -167,14 +167,18 @@ public class QueryParser {
         ArrayList<String> columns = new ArrayList<>(Arrays.asList(colValSet));
         String conditionColumns = selectMatcher.group(10);
         String conditionValues = selectMatcher.group(11);
-        TableOperation tableOperation = new TableOperation();
 
-        boolean status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns, conditionValues);
+        if (dbOperation.getCurrentDatabase() != null) {
+            TableOperation tableOperation = new TableOperation();
+            boolean status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns, conditionValues);
 
-        if (status) {
-            System.out.println("Successfully performed select query on the " + tableName + " table");
+            if (status) {
+                System.out.println("Successfully performed select query on the " + tableName + " table");
+            } else {
+                System.out.println("Failure to perform selection query on the " + tableName + " table");
+            }
         } else {
-            System.out.println("Failure to perform selection query on the " + tableName + " table");
+            System.out.println("Please select database");
         }
     }
 
@@ -197,55 +201,73 @@ public class QueryParser {
         String conditionColumns = conditionSet.split("=")[0].strip();
         String conditionValues = conditionSet.split("=")[1].strip();
 
-        TableOperation tableOperation = new TableOperation();
-        boolean status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values, conditionColumns, conditionValues);
+        if (dbOperation.getCurrentDatabase() != null) {
+            TableOperation tableOperation = new TableOperation();
+            boolean status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values, conditionColumns, conditionValues);
 
-        if (status) {
-            System.out.println("Successfully updated into the table");
+            if (status) {
+                System.out.println("Successfully updated into the table");
+            } else {
+                System.out.println("Failure updating of new entry in: " + tableName + " table");
+            }
         } else {
-            System.out.println("Failure updating of new entry in: " + tableName + " table");
+            System.out.println("Please select database");
         }
     }
 
     public void deleteTable(Matcher deleMatcher) {
-        System.out.println("count==="+deleMatcher.groupCount());
+        System.out.println("count===" + deleMatcher.groupCount());
         String tableName = deleMatcher.group(1);
         String conditionColumn = deleMatcher.group(3);
         String conditionValue = deleMatcher.group(4);
 
-        TableOperation tableOperation = new TableOperation();
-        boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn, conditionValue);
+        if (dbOperation.getCurrentDatabase() != null) {
+            TableOperation tableOperation = new TableOperation();
+            boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn, conditionValue);
 
-        if (status) {
-            System.out.println("Successfully deleted entry from the table");
+            if (status) {
+                System.out.println("Successfully deleted entry from the table");
+            } else {
+                System.out.println("Failure deleting of new entry in: " + tableName + " table");
+            }
         } else {
-            System.out.println("Failure deleting of new entry in: " + tableName + " table");
+            System.out.println("Please select database");
         }
     }
 
     public void truncateTable(Matcher truncateMatcher) {
         String tableName = truncateMatcher.group(1);
 
-        TableOperation tableOperation = new TableOperation();
-        boolean status = tableOperation.truncate(dbOperation.getCurrentDatabase(), tableName);
+        if (dbOperation.getCurrentDatabase() != null) {
+            TableOperation tableOperation = new TableOperation();
+            boolean status = tableOperation.truncate(dbOperation.getCurrentDatabase(), tableName);
 
-        if(status) {
-            System.out.println("Successfully truncated the "+ tableName +" table");
+            if (status) {
+                System.out.println("Successfully truncated the " + tableName + " table");
+            } else {
+                System.out.println("Failure to truncate the : " + tableName + " table");
+            }
         } else {
-            System.out.println("Failure to truncate the : "+tableName+" table");
+            System.out.println("Please select database");
         }
+
     }
 
     public void dropTable(Matcher dropMatcher) {
         String tableName = dropMatcher.group(1);
 
-        TableOperation tableOperation = new TableOperation();
-        boolean status = tableOperation.drop(dbOperation.getCurrentDatabase(), tableName);
+        if (dbOperation.getCurrentDatabase() != null) {
+            TableOperation tableOperation = new TableOperation();
+            boolean status = tableOperation.drop(dbOperation.getCurrentDatabase(), tableName);
 
-        if(status) {
-            System.out.println("Successfully dropped the table");
+            if (status) {
+                System.out.println("Successfully dropped the table");
+            } else {
+                System.out.println("Failure to drop the " + tableName + " table");
+            }
         } else {
-            System.out.println("Failure to drop the "+tableName+" table");
+            System.out.println("Please select database");
         }
+
     }
 }

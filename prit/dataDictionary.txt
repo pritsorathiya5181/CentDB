@@ -1,8 +1,21 @@
-varchar(255) City varchar(255) PostalCode varchar(255) Country varchar(255)
+Customers
+COL1 char PK
+COL3 int FK REFERENCES table col3
+COL5 int
+student_information student_id int PK 
+first_name char 
+last_name char 
+contact_number char REFERENCES grade student_id 
 
-lastname char contactnumber char
-last_name char contact_number char REFERENCES grade student_id
+person student_id int PK 
+first_name char 
+last_name char 
+contact_number char REFERENCES grade student_id 
 
-Address varchar(255) City varchar(255) PostalCode varchar(255) Country varchar(255)
 
-Customers CustomerName int ContactName varchar(255) Address varchar(255) City varchar(255) PostalCode varchar(255) Country varchar(255) 
+Jet student_id int PK 
+first_name char 
+last_name char 
+contact_number char REFERENCES grade student_id 
+
+
