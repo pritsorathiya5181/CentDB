@@ -9,6 +9,7 @@ import static Constants.queryRegex.*;
 
 public class QueryParser {
     DatabaseOperation dbOperation = new DatabaseOperation();
+    Transaction transaction = new Transaction();
 
     public void parseQuery(String query) {
         System.out.println("current database==" + dbOperation.getCurrentDatabase());
@@ -22,6 +23,8 @@ public class QueryParser {
         Matcher deleteMatcher = DELETE_QUERY_FINAL.matcher(query);
         Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
         Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
+        Matcher beginTransactionMatcher =  BEGIN_TRANSACTION_QUERY_FINAL.matcher(query);
+
 
         if (createDatabaseMatcher.find()) {
             createDatabase(createDatabaseMatcher);
@@ -42,7 +45,11 @@ public class QueryParser {
             truncateTable(truncateMatcher);
         } else if (dropMatcher.find()) {
             dropTable(dropMatcher);
-        } else {
+        } else if(beginTransactionMatcher.find()){
+        	Transaction transactionQuery = new Transaction();
+        	System.out.println("Transaction Begins");
+        	transactionQuery.processTransaction();
+        }else {
             System.out.println("Please enter a valid query");
         }
     }
