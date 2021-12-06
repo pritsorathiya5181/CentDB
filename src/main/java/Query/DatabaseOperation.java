@@ -1,6 +1,6 @@
 package Query;
 
-import Constants.fileLocation;
+import Constants.*;
 
 import java.io.File;
 
