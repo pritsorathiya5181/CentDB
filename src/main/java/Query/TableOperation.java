@@ -38,8 +38,6 @@ public class TableOperation {
                 System.out.println(tableName + " table is already exist");
                 return false;
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -60,7 +58,7 @@ public class TableOperation {
             String primaryKey = getPrimaryKeyColumn(dbName, tableName);
 
             if (primaryKey == null) {
-                System.out.println("No primary key in table");
+                System.out.println("No primary key is in table");
             } else {
                 Map<String, ArrayList<String>> records = getRecords(myReader);
                 pkColValues = getColumnValues(primaryKey, records);
@@ -84,7 +82,8 @@ public class TableOperation {
                 }
                 fileWriter.append(columns.get(i).strip());
                 fileWriter.append(" ");
-                fileWriter.append(values.get(i).strip());
+//                fileWriter.append(values.get(i).strip().replaceAll("^\'|\'$", ""));
+                fileWriter.append(values.get(i));
                 fileWriter.append("\n");
             }
             fileWriter.append("\n");
@@ -274,17 +273,20 @@ public class TableOperation {
             Set<String> columnList = records.keySet();
 //            System.out.println(columnList.toArray()[0]);
             for (int i = 0; i < records.get(columnList.toArray()[0]).size(); i++) {
+                String record = "";
                 for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
                     boolean hasKey = ee.getKey().equals(conditionColumns);
                     boolean hasValue = ee.getValue().get(i).equals(conditionValues);
 
                     if (!(hasKey && hasValue)) {
-                        String record = ee.getKey() + " " + ee.getValue().get(i) + "\n";
-                        writer.write(record);
-                        writer.flush();
+                        record += ee.getKey() + " " + ee.getValue().get(i) + "\n";
+                    } else {
+                        record = "";
+                        break;
                     }
                 }
-                System.out.println("\n");
+                writer.write(record);
+                writer.flush();
             }
 
             return true;

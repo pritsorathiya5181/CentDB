@@ -41,7 +41,6 @@ public class QueryParser {
                 Lock.removeLock(tableName);
             } else {
                 System.out.println("Table Locked. Try again after sometime..");
-
             }
         } else if (selectMatcher.find()) {
             selectTable(selectMatcher);
@@ -96,7 +95,12 @@ public class QueryParser {
     }
 
     public void useDatabase(Matcher useDatabaseMatcher) {
-        dbOperation.useDb(useDatabaseMatcher.group(1));
+        boolean status = dbOperation.useDb(useDatabaseMatcher.group(1));
+        if (status) {
+            System.out.println("Switched the database");
+        } else {
+            System.out.println("'" + useDatabaseMatcher.group(1) + "' database is not available.");
+        }
     }
 
     public void createTable(Matcher createMatcher) {
@@ -134,12 +138,9 @@ public class QueryParser {
     }
 
     public void insertTable(Matcher insertMatcher) {
-        System.out.println("Query Matched: " + insertMatcher.group(1) + " == " + insertMatcher.group(2) + " == " + insertMatcher.group(3));
         String tableName = insertMatcher.group(1);
-
         String columnSet = insertMatcher.group(2);
         String[] cols = columnSet.split(",");
-
         String valueSet = insertMatcher.group(3);
         String[] vals = valueSet.split(",");
 

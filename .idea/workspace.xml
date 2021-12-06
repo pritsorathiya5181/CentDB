@@ -5,19 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca8f9e90-cc47-494e-aa44-135c898dce78" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prit/Customers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/prit/Customers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentDB.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CentDB.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/Customers.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/Jet.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/dataDictionary.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/person.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/student_information.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Constants/fileLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants/fileLocation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/DatabaseOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/DatabaseOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/Lock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/Lock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" afterDir="false" />
-<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/HashAlgorithm.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/HashAlgorithm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/LoginUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/LoginUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/RegisterUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/RegisterUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/UserModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/UserModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/userCredential.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Constants/fileLocation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Constants/fileLocation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Constants/queryRegex.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Constants/queryRegex.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Authentication/UserModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Authentication/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Authentication/LoginUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Authentication/RegisterUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Authentication/RegisterUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Home/SystemOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Home/SystemOptions.java" afterDir="false" />
-=======
->>>>>>> locking
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/EventLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/EventLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/GeneralLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/GeneralLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter$TYPE_OF_LOG.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter$TYPE_OF_LOG.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/QueryLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/QueryLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Query/DatabaseOperation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/DatabaseOperation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Query/QueryParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/QueryParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Query/TableOperation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/TableOperation.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,6 +143,8 @@
       <workItem from="1638731612218" duration="427000" />
       <workItem from="1638732069523" duration="11000" />
       <workItem from="1638735158332" duration="2052000" />
+      <workItem from="1638797469016" duration="3038000" />
+      <workItem from="1638801602433" duration="3440000" />
     </task>
     <servers />
   </component>
@@ -145,6 +164,35 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>176</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>177</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>165</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>163</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />

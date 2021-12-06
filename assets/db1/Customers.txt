@@ -1,11 +1,14 @@
 Address 'Skagen 21'
 PostalCode '4006'
-Country 'Norway'
+Country 'India'
+CustomerName 'Cardinal'
 City 'Stavanger'
 ContactName 'Tom B. Erichsen'
+
 Address 'Skagen 21'
 PostalCode '4006'
-Country 'Norway'
+Country 'India'
+CustomerName 'Cardinal'
 City 'Stavanger'
 ContactName 'Tom B. Erichsen'
 
