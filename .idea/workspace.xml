@@ -15,6 +15,11 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Authentication/UserModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Authentication/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Authentication/LoginUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Authentication/RegisterUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Authentication/RegisterUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Home/SystemOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Home/SystemOptions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
