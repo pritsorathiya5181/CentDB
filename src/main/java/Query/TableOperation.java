@@ -2,9 +2,7 @@ package Query;
 
 import Constants.fileLocation;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,9 +29,9 @@ public class TableOperation {
                         fileWriter.append((keySet.get(colName.get(i))));
                         fileWriter.append(" ");
                     }
-//                fileWriter.append("\n");
+                    fileWriter.append("\n");
                 }
-                fileWriter.append("\n");
+                fileWriter.append("\n\n");
                 fileWriter.close();
                 return true;
             } else {
@@ -261,24 +259,34 @@ public class TableOperation {
 
             FileWriter writer = new FileWriter(tableFile, false);
             ArrayList<String> temp;
-            System.out.println("records=="+records+"en=="+records.entrySet());
-            for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
-                StringBuilder record = new StringBuilder();
-                System.out.println("eee==="+ee);
-                boolean hasKey = ee.getKey().equals(conditionColumns);
-                boolean hasValue = ee.getValue().contains(conditionValues);
-                System.out.println("eee==="+hasValue+"==="+hasKey);
-                if (!(hasKey && hasValue)) {
-                    temp = ee.getValue();
-                    for (String s : temp) {
-                        record.append(s).append("\n");
+            System.out.println("records==" + records + "en==" + records.keySet());
+//            for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
+//                System.out.println("eee==="+ee);
+//                boolean hasKey = ee.getKey().equals(conditionColumns);
+//                boolean hasValue = ee.getValue().contains(conditionValues);
+//                System.out.println("eee==="+hasValue+"==="+hasKey);
+//                if (!(hasKey && hasValue)) {
+//                    String record = ee.getKey() + " " + ee.getValue().get(i) + "\n";
+//                    writer.write(record);
+//                    writer.flush();
+//                }
+//            }
+            Set<String> columnList = records.keySet();
+//            System.out.println(columnList.toArray()[0]);
+            for (int i = 0; i < records.get(columnList.toArray()[0]).size(); i++) {
+                for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
+                    boolean hasKey = ee.getKey().equals(conditionColumns);
+                    boolean hasValue = ee.getValue().get(i).equals(conditionValues);
+
+                    if (!(hasKey && hasValue)) {
+                        String record = ee.getKey() + " " + ee.getValue().get(i) + "\n";
+                        writer.write(record);
+                        writer.flush();
                     }
-                    writer.write(record.toString());
-                    writer.flush();
-                    writer.write("\n");
-                    writer.flush();
                 }
+                System.out.println("\n");
             }
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -308,8 +316,7 @@ public class TableOperation {
             System.out.println("Table Doesn't exist");
             return false;
         } else {
-            boolean deleteStatus = tableFile.delete();
-
+            tableFile.delete();
         }
         File dataDictionaryFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + "dataDictionary.txt");
         try {
@@ -337,6 +344,63 @@ public class TableOperation {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean erd(String databaseName) throws IOException {
+        HashMap<String, ArrayList<String>> list = new HashMap<String, ArrayList<String>>();
+
+        File dataDict = new File(fileLocation.LOCAL_PATH + "/" + databaseName + "/dataDictionary.txt");
+
+        if (!dataDict.exists()) {
+            System.out.println("Database doesn't exists");
+            return false;
+        }
+        Scanner myReader = new Scanner(dataDict);
+
+        ArrayList<String> data = new ArrayList<String>();
+        int count = 0;
+        String table = null;
+
+        while (myReader.hasNextLine()) {
+            String st = myReader.nextLine();
+            if (st.length() > 0) {
+                if (count == 0) {
+                    table = st;
+                    count = count + 1;
+                } else {
+                    String[] details = st.split("\s");
+                    boolean isPrimary = details.length == 3;
+                    boolean isForeign = details.length == 6;
+                    if (isPrimary) {
+                        data.add("\033[4m" + details[0] +
+                                "\033[0m" + " " + details[1]);
+                    } else if (isForeign) {
+                        data.add("\033[0;1m" + details[0] + "\033[0;0m" + " " + details[1]);
+                    } else {
+                        data.add(details[0] + " " + details[1]);
+                    }
+                }
+                list.put(table, data);
+            } else {
+                list.put(table, data);
+                count = 0;
+                data = new ArrayList<String>();
+            }
+        }
+        System.out.println("list===" + list + "---" + data);
+        System.out.println("\n*********************************************************************************");
+        System.out.println("*                                ER DIAGRAM                                     *");
+        System.out.println("*********************************************************************************");
+        System.out.println("Table" + "\t\t\t" + "| " + "Columns");
+        System.out.println("---------------------------------------------------------------------------------");
+        for (String key : list.keySet()) {
+            System.out.print(key + "\t\t\t" + "| ");
+            for (String c : list.get(key)) {
+                System.out.print(c + "\t\t" + "| ");
+            }
+            System.out.println("\n---------------------------------------------------------------------------------");
+        }
+        return true;
     }
 }
 

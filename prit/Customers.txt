@@ -1,14 +1,11 @@
-CustomerName 'Cardinal'
-ContactName 'Tom B. Erichsen'
 Address 'Skagen 21'
-City 'Stavanger'
 PostalCode '4006'
 Country 'Norway'
-
-CustomerName 'Cardinal'
+City 'Stavanger'
 ContactName 'Tom B. Erichsen'
 Address 'Skagen 21'
-City 'Stavanger'
 PostalCode '4006'
 Country 'Norway'
+City 'Stavanger'
+ContactName 'Tom B. Erichsen'
 
