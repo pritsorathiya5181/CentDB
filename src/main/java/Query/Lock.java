@@ -8,11 +8,11 @@ public class Lock {
 	
 	public static void addLock(String tablename) {
 		tableSet.add(tablename);
-		System.out.println(tableSet);
+		System.out.println("locked table: "+ tableSet);
 	}
 	
 	public static boolean checkLock(String tablename) {
-		System.out.println(tableSet);
+		System.out.println("lock tables: "+ tableSet);
 		boolean status = false;
 		if(tableSet.contains(tablename)) {
 			status = true;
@@ -22,6 +22,6 @@ public class Lock {
 	
 	public static void removeLock(String tablename) {
 		tableSet.remove(tablename);
-		System.out.println(tableSet);
+		System.out.println("removed lock: "+tableSet);
 	}
 }
