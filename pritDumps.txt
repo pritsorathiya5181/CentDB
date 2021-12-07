@@ -1,0 +1,2 @@
+INSERT INTO G:\STUDY\5408 - DMWA\project\GroupProject\CentDB\prit\Customers (CustomerName,ContactName,Address,City,PostalCode,Country) VALUES ('Cardinal','Tom B. Erichsen','Skagen 21','Stavanger','4006','Norway');
+INSERT INTO G:\STUDY\5408 - DMWA\project\GroupProject\CentDB\prit\Customers (CustomerName,ContactName,Address,City,PostalCode,Country) VALUES ('Cardinal','Tom B. Erichsen','Skagen 21','Stavanger','4006','Norway');
