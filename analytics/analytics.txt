@@ -1,0 +1,23 @@
+Total databases in the system : 2
+===============================================
+
+DB:: ktest (total tables in the database-> 2):
+     |
+     |->dummyTable.txt
+         |
+         |-> total records: 0
+
+     |->dummyTable2.txt
+         |
+         |-> total records: 0
+
+DB:: person (total tables in the database-> 2):
+     |
+     |->dummyPerson1.txt
+         |
+         |-> total records: 6
+
+     |->dummyPerson2.txt
+         |
+         |-> total records: 0
+
