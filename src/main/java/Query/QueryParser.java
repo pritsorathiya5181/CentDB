@@ -91,7 +91,10 @@ public class QueryParser {
 
     public void createDatabase(Matcher createDatabaseMatcher) {
         boolean status = dbOperation.createDb(createDatabaseMatcher.group(1));
-        System.out.println("create db status===" + status);
+//        System.out.println("create db status===" + status);
+        if (status) {
+            System.out.println("Created database: " + createDatabaseMatcher.group(1));
+        }
     }
 
     public void useDatabase(Matcher useDatabaseMatcher) {

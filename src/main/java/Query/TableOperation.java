@@ -19,7 +19,7 @@ public class TableOperation {
             File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
             if (tableFile.createNewFile()) {
                 fileWriter.append(tableName);
-                fileWriter.append(" ");
+                fileWriter.append("\n");
                 for (int i = 0; i < colName.size(); i++) {
                     fileWriter.append(colName.get(i).strip());
                     fileWriter.append(" ");
@@ -191,9 +191,9 @@ public class TableOperation {
         }
     }
 
-    public boolean update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String clmValues) {
+    public boolean update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String conditionValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
-        String conditionValues = "'" + clmValues + "'";
+//        String conditionValues = "'" + clmValues + "'";
         if (!tableFile.exists()) {
             System.out.println(tableName + " table doesn't exist");
             return false;
@@ -219,7 +219,7 @@ public class TableOperation {
                 for (int i = 0; i < temp.size(); i++) {
                     if (columns.contains(ee.getKey()) && presentIn.contains(i)) {
                         int index = columns.indexOf(ee.getKey());
-                        temp.set(i, "'" + values.get(index) + "'");
+                        temp.set(i, values.get(index));
                         records.put(ee.getKey(), temp);
                     }
                 }
@@ -244,9 +244,9 @@ public class TableOperation {
         }
     }
 
-    public boolean delete(String dbName, String tableName, String conditionColumns, String clmValues) {
+    public boolean delete(String dbName, String tableName, String conditionColumns, String conditionValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
-        String conditionValues = "'" + clmValues + "'";
+//        String conditionValues = "'" + clmValues + "'";
 
         if (!tableFile.exists()) {
             System.out.println("Table Doesn't exist");
@@ -287,6 +287,8 @@ public class TableOperation {
                 }
                 writer.write(record);
                 writer.flush();
+                writer.write("\n");
+                writer.flush();
             }
 
             return true;
@@ -320,27 +322,47 @@ public class TableOperation {
         } else {
             tableFile.delete();
         }
-        File dataDictionaryFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + "dataDictionary.txt");
+
+        File dataDictionaryFile =
+                new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + "dataDictionary.txt");
+        BufferedReader reader = null;
         try {
-            Scanner myReader = new Scanner(dataDictionaryFile);
-            Map<String, ArrayList<String>> records = getRecords(myReader);
+            reader = new BufferedReader(new FileReader(dataDictionaryFile));
+            String st, tableKey = null;
+            HashMap<String, ArrayList<String>> records = new HashMap<>();
+            ArrayList<String> temp = null;
+            while ((st = reader.readLine()) != null) {
+                if (st.length() > 0) {
+                    String[] array = st.trim().split(" ");
+                    if (array.length == 1) {
+                        tableKey = st;
+                    }
+                    if (records.containsKey(tableKey)) {
+                        temp = new ArrayList<>(records.get(tableKey));
+                    } else {
+                        temp = new ArrayList<>();
+                    }
+                    temp.add(st);
+                }
+                records.put(tableKey, temp);
+            }
 
-            FileWriter writer = new FileWriter(dataDictionaryFile, false);
-            ArrayList<String> temp;
-
+            FileWriter writer = null;
+            writer = new FileWriter(dataDictionaryFile, false);
             for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
-                StringBuilder record = new StringBuilder();
+                String record = "";
                 if (!ee.getKey().equals(tableName)) {
                     temp = ee.getValue();
-                    for (String s : temp) {
-                        record.append(s).append("\n");
+                    for (int i = 0; i < temp.size(); i++) {
+                        record += temp.get(i) + "\n";
                     }
-                    writer.write(record.toString());
+                    writer.write(record);
                     writer.flush();
                     writer.write("\n");
                     writer.flush();
                 }
             }
+            System.out.println("table Dropped successfully");
             return true;
         } catch (IOException e) {
             e.printStackTrace();

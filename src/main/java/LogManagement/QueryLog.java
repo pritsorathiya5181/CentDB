@@ -1,16 +1,17 @@
 package LogManagement;
 
+import Authentication.UserModel;
+import Constants.fileLocation;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 
-import Authentication.UserModel;
-
 public class QueryLog {
-	private String queryLogFilePath = "/Users/vibhorbhatnagar/Desktop/Query_Logs.txt";
+//	private String queryLogFilePath = "/Users/vibhorbhatnagar/Desktop/Query_Logs.txt";
+	private String queryLogFilePath = fileLocation.LOCAL_PATH + "/Event_Logs.txt";
 	
 	private File file;
 	private java.io.FileWriter queryFileWriter;

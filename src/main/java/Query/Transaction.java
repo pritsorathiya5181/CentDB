@@ -14,14 +14,15 @@ public class Transaction {
         Scanner sc = new Scanner(System.in);
         String query = "";
         while (true) {
-            System.out.println("\n1. Execute Transaction query");
-            System.out.println("2. Exit");
-            System.out.println("Select an option");
-            String queryOption = sc.nextLine();
-            System.out.println("query options: " + queryOption);
-            switch (queryOption) {
-                case "1" -> {
-                    System.out.println("Please enter your query");
+//            System.out.println("\n1. Execute Transaction query");
+//            System.out.println("2. Exit");
+//            System.out.println("Select an option");
+//            String queryOption = sc.nextLine();
+//            System.out.println("query options: " + queryOption);
+
+//            switch (queryOption) {
+//                case "1" -> {
+//                  System.out.println("Please enter your query");
                     query = sc.nextLine();
 
                     Matcher createMatcher = CREATE_QUERY_FINAL.matcher(query);
@@ -44,16 +45,18 @@ public class Transaction {
                         executeQuery(transactionQueryList);
                         System.out.println("Transaction Completed.");
                         qp.listQueryOptions();
+                        break;
                     } else if (rollbackTransactionMatcher.find()) {
                         transactionQueryList.clear();
                         System.out.println("Transaction Revoked.");
                         qp.listQueryOptions();
+                        break;
                     } else {
                         System.out.println("Please enter a valid query");
                     }
-                }
-                case "2" -> System.exit(0);
-            }
+//                }
+//                case "2" -> System.exit(0);
+//            }
 
         }
     }
