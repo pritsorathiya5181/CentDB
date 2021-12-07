@@ -149,11 +149,11 @@ public class TableOperation {
         }
     }
 
-    public boolean select(String dbName, String tableName, ArrayList<String> columns, String conditionColumns, String conditionValues) {
+    public int select(String dbName, String tableName, ArrayList<String> columns, String conditionColumns, String conditionValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         if (!tableFile.exists()) {
             System.out.println(tableName + " table doesn't exist");
-            return false;
+            return 0;
         }
         try {
             Scanner myReader = new Scanner(tableFile);
@@ -169,6 +169,8 @@ public class TableOperation {
                 }
                 System.out.println(presentIn.toString());
             }
+            int countWhenHasCondition = 0;
+            int countWhenNotHaveCondition = 0;
 
             for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
                 String columnName = ee.getKey();
@@ -177,26 +179,36 @@ public class TableOperation {
                     temp = ee.getValue();
                     for (int i = 0; i < temp.size(); i++) {
                         if (conditionColumns != null && presentIn.contains(i))
+                        {
                             System.out.printf("%-20s", temp.get(i));
+                            countWhenHasCondition = temp.size();
+                        }
                         else if (conditionColumns == null)
+                        {
                             System.out.printf("%-20s", temp.get(i));
+                            countWhenNotHaveCondition = temp.size();
+                        }
                     }
                     System.out.println("\n");
                 }
             }
-            return true;
+            if(conditionColumns != null) {
+                return countWhenHasCondition;
+            } else {
+                return countWhenNotHaveCondition;
+            }
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return 0;
         }
     }
 
-    public boolean update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String conditionValues) {
+    public int update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String conditionValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
 //        String conditionValues = "'" + clmValues + "'";
         if (!tableFile.exists()) {
             System.out.println(tableName + " table doesn't exist");
-            return false;
+            return 0;
         }
         try {
             Scanner myReader = new Scanner(tableFile);
@@ -213,6 +225,7 @@ public class TableOperation {
                     }
                 }
             }
+            int count = 0;
 //            UPDATE Customers SET City=Halifax WHERE Country=Canada;
             for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
                 temp = ee.getValue();
@@ -221,6 +234,7 @@ public class TableOperation {
                         int index = columns.indexOf(ee.getKey());
                         temp.set(i, values.get(index));
                         records.put(ee.getKey(), temp);
+                        count++;
                     }
                 }
             }
@@ -237,10 +251,10 @@ public class TableOperation {
             }
             writer.close();
             System.out.println("value Updated successfully");
-            return true;
+            return count;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return 0;
         }
     }
 

@@ -1,5 +1,7 @@
 package Query;
 
+import Analytics.*;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -14,7 +16,8 @@ public class QueryOptions {
         while (true) {
             System.out.println("\n1. Execute SQL query");
             System.out.println("2. Export ERD database");
-            System.out.println("3. Exit");
+            System.out.println("3. show analytics");
+            System.out.println("4. Exit");
             System.out.println("Select an option");
 
             String queryOption =sc.nextLine();
@@ -34,7 +37,11 @@ public class QueryOptions {
                         e.printStackTrace();
                     }
                 }
-                case "3" -> System.exit(0);
+                case "3" -> {
+                     Analytics a = new Analytics();
+                     a.performAnalytics();
+                }
+                case "4" -> System.exit(0);
             }
         }
     }
