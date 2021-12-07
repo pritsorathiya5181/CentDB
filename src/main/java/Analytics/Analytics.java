@@ -96,7 +96,11 @@ public class Analytics implements AnalyticsService{
 //                            System.out.println("         |");
                             long lines=-1;
                             try (Stream<String> stream = Files.lines(Path.of(d.getPath()), StandardCharsets.UTF_8)) {
-                                lines = stream.count();
+                                lines = stream.filter(s->s.length()==0).toList().size() ;
+                                if(lines !=0 ){
+                                    lines +=1;
+                                }
+//
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

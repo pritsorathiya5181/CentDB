@@ -15,7 +15,7 @@ DB:: person (total tables in the database-> 2):
      |
      |->dummyPerson1.txt
          |
-         |-> total records: 6
+         |-> total records: 2
 
      |->dummyPerson2.txt
          |
