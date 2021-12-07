@@ -5,16 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca8f9e90-cc47-494e-aa44-135c898dce78" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prit/Person.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prit/dataDictionary.txt" beforeDir="false" afterPath="$PROJECT_DIR$/prit/dataDictionary.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Constants/queryRegex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants/queryRegex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CentDB.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CentDB.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/Customers.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/Jet.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/dataDictionary.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/person.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prit/student_information.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Constants/fileLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Constants/fileLocation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/DatabaseOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/DatabaseOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Query/Lock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/Lock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/QueryParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Query/TableOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/HashAlgorithm.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/HashAlgorithm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/LoginUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/LoginUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/RegisterUser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/RegisterUser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/UserModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Authentication/UserModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Authentication/userCredential.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Constants/fileLocation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Constants/fileLocation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Constants/queryRegex.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Constants/queryRegex.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Home/SystemOptions.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/java/Authentication/userCredential.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/EventLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/EventLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/GeneralLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/GeneralLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter$TYPE_OF_LOG.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter$TYPE_OF_LOG.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/LogManagementWriter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LogManagement/QueryLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LogManagement/QueryLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Query/DatabaseOperation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/DatabaseOperation.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Query/QueryParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/QueryParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Query/TableOperation.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Query/TableOperation.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +86,22 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.SystemOptions (1)">
+    <configuration name="SystemOptions (1)" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="16" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Home.SystemOptions" />
+      <module name="CentDB" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Home.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SystemOptions" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="16" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -82,6 +117,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.SystemOptions" />
+      <item itemvalue="Application.SystemOptions (1)" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -96,6 +135,16 @@
       <workItem from="1638561729381" duration="717000" />
       <workItem from="1638635259891" duration="505000" />
       <workItem from="1638638441275" duration="7973000" />
+      <workItem from="1638714879509" duration="2172000" />
+      <workItem from="1638727586460" duration="1654000" />
+      <workItem from="1638729527380" duration="128000" />
+      <workItem from="1638729663672" duration="186000" />
+      <workItem from="1638729861099" duration="1438000" />
+      <workItem from="1638731612218" duration="427000" />
+      <workItem from="1638732069523" duration="11000" />
+      <workItem from="1638735158332" duration="2052000" />
+      <workItem from="1638797469016" duration="3038000" />
+      <workItem from="1638801602433" duration="3440000" />
     </task>
     <servers />
   </component>
@@ -118,19 +167,29 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Query/QueryParser.java</url>
-          <line>163</line>
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>176</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Query/QueryParser.java</url>
-          <line>164</line>
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>177</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Query/QueryParser.java</url>
-          <line>166</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>165</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>164</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Query/TableOperation.java</url>
+          <line>163</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
