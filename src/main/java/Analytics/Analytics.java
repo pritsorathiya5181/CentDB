@@ -56,7 +56,7 @@ public class Analytics implements AnalyticsService{
                 int crrDatabaseTables =0;
                 //each database
                 int noOfTablesInTheCrrDatabase =0;
-                if(database.listFiles().length >0){
+                if(database.listFiles() != null && database.listFiles().length >0){
                     noOfTablesInTheCrrDatabase = database.listFiles().length-1;
                 }
 

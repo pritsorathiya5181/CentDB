@@ -41,7 +41,7 @@ public class LoginUser {
         return false;
     }
 
-    private boolean doLogin(String password, String[] userMeta, String givenAnswer) throws NoSuchAlgorithmException {
+    public boolean doLogin(String password, String[] userMeta, String givenAnswer) throws NoSuchAlgorithmException {
         final String hashedPassword = HashAlgorithm.toHexString(HashAlgorithm.getSHA(password));
         final String rightAnswer = userMeta[3];
 

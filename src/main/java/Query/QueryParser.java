@@ -105,7 +105,7 @@ public class QueryParser {
 		}
 	}
 
-	public void createDatabase(Matcher createDatabaseMatcher) {
+	public boolean createDatabase(Matcher createDatabaseMatcher) {
 		Map<String, String> createDbLogMap = new HashMap<String,String>();
 		long queryStartTime = System.nanoTime();
 		boolean status = dbOperation.createDb(createDatabaseMatcher.group(1));
@@ -123,9 +123,10 @@ public class QueryParser {
 		createDbLogMap.put(LogManagementService.DB_STATE_KEY, "Total tables: ");
 		createDbLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 		LogManagementService.getInstance().writeLog(createDbLogMap);
+		return status;
 	}
 
-	public void useDatabase(Matcher useDatabaseMatcher) {
+	public boolean useDatabase(Matcher useDatabaseMatcher) {
 		Map<String, String> useDbLogMap = new HashMap<String,String>();
 		long queryStartTime = System.nanoTime();
 		boolean status = dbOperation.useDb(useDatabaseMatcher.group(1));
@@ -144,9 +145,10 @@ public class QueryParser {
 		useDbLogMap.put(LogManagementService.DB_STATE_KEY, "Total tables: ");
 		useDbLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 		LogManagementService.getInstance().writeLog(useDbLogMap);
+		return status;
 	}
 
-	public void createTable(Matcher createMatcher) {
+	public boolean createTable(Matcher createMatcher) {
 		HashMap<String, String> keySet = new HashMap<>();
 		Map<String,String> createTableLogMap = new HashMap<String,String>();
 		String tableName = createMatcher.group(1);
@@ -190,12 +192,14 @@ public class QueryParser {
 			createTableLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 			createTableLogMap.put(LogManagementService.DB_STATE_KEY, "Total tables: ");
 			LogManagementService.getInstance().writeLog(createTableLogMap);
+			return status;
 		} else {
 			System.out.println("Please select database");
+			return false;
 		}
 	}
 
-	public void insertTable(Matcher insertMatcher) {
+	public boolean insertTable(Matcher insertMatcher) {
 		String tableName = insertMatcher.group(1);
 		String columnSet = insertMatcher.group(2);
 		String[] cols = columnSet.split(",");
@@ -217,12 +221,14 @@ public class QueryParser {
 			} else {
 				System.out.println("Failure insertion of new entry in: " + tableName + " table");
 			}
+			return status;
 		} else {
 			System.out.println("Please select database");
+			return false;
 		}
 	}
 
-	public void selectTable(Matcher selectMatcher) {
+	public boolean selectTable(Matcher selectMatcher) {
 		Map<String, String> selectTableLogMap = new HashMap<String,String>();
 		String tableName = selectMatcher.group(8);
 		String tableSet = selectMatcher.group(1);
@@ -251,12 +257,14 @@ public class QueryParser {
 			selectTableLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 			selectTableLogMap.put(LogManagementService.DB_STATE_KEY, "Total Tables: ");
 			LogManagementService.getInstance().writeLog(selectTableLogMap);
+			return status > 0;
 		} else {
 			System.out.println("Please select database");
+			return false;
 		}
 	}
 
-	public void updateTable(Matcher updateMatcher) {
+	public boolean updateTable(Matcher updateMatcher) {
 		Map<String, String> updateTableLogMap = new HashMap<String,String>();
 		String tableName = updateMatcher.group(1);
 		String tableSet = updateMatcher.group(2);
@@ -297,12 +305,14 @@ public class QueryParser {
 			updateTableLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 			updateTableLogMap.put(LogManagementService.DB_STATE_KEY, "No change in database state !");
 			LogManagementService.getInstance().writeLog(updateTableLogMap);
+			return status > 0;
 		} else {
 			System.out.println("Please select database");
+			return false;
 		}
 	}
 
-	public void deleteTable(Matcher deleMatcher) {
+	public boolean deleteTable(Matcher deleMatcher) {
 		Map<String, String> updateTableLogMap = new HashMap<String,String>();
 		System.out.println("count===" + deleMatcher.groupCount());
 		String tableName = deleMatcher.group(1);
@@ -329,12 +339,14 @@ public class QueryParser {
 			updateTableLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 			updateTableLogMap.put(LogManagementService.DB_STATE_KEY, "No change in database state !");
 			LogManagementService.getInstance().writeLog(updateTableLogMap);
+			return status;
 		} else {
 			System.out.println("Please select database");
+			return false;
 		}
 	}
 
-	public void truncateTable(Matcher truncateMatcher) {
+	public boolean truncateTable(Matcher truncateMatcher) {
 		String tableName = truncateMatcher.group(1);
 		Map<String,String> truncateTableLogMap = new HashMap<String,String>();
 		if (dbOperation.getCurrentDatabase() != null) {
@@ -356,13 +368,15 @@ public class QueryParser {
 			truncateTableLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 			truncateTableLogMap.put(LogManagementService.DB_STATE_KEY, "No change in database state.");
 			LogManagementService.getInstance().writeLog(truncateTableLogMap);
+			return status;
 		} else {
 			System.out.println("Please select database");
+			return true;
 		}
 
 	}
 
-	public void dropTable(Matcher dropMatcher) {
+	public boolean dropTable(Matcher dropMatcher) {
 		Map<String,String> dropTableLogMap = new HashMap<String,String>();
 		String tableName = dropMatcher.group(1);
 
@@ -385,8 +399,10 @@ public class QueryParser {
 			dropTableLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 			dropTableLogMap.put(LogManagementService.DB_STATE_KEY, "No change in database state");
 			LogManagementService.getInstance().writeLog(dropTableLogMap);
+			return status;
 		} else {
 			System.out.println("Please select database");
+			return false;
 		}
 	}
 }
