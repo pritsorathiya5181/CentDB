@@ -149,7 +149,8 @@ public class TableOperation {
         }
     }
 
-    public int select(String dbName, String tableName, ArrayList<String> columns, String conditionColumns, String conditionValues) {
+    public int select(String dbName, String tableName, ArrayList<String> columns, String conditionColumns, String clmValues) {
+        String conditionValues = "'" + clmValues + "'";
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         if (!tableFile.exists()) {
             System.out.println(tableName + " table doesn't exist");
@@ -178,13 +179,10 @@ public class TableOperation {
                     System.out.printf("%-15s=>", columnName);
                     temp = ee.getValue();
                     for (int i = 0; i < temp.size(); i++) {
-                        if (conditionColumns != null && presentIn.contains(i))
-                        {
+                        if (conditionColumns != null && presentIn.contains(i)) {
                             System.out.printf("%-20s", temp.get(i));
                             countWhenHasCondition = temp.size();
-                        }
-                        else if (conditionColumns == null)
-                        {
+                        } else if (conditionColumns == null) {
                             System.out.printf("%-20s", temp.get(i));
                             countWhenNotHaveCondition = temp.size();
                         }
@@ -192,7 +190,7 @@ public class TableOperation {
                     System.out.println("\n");
                 }
             }
-            if(conditionColumns != null) {
+            if (conditionColumns != null) {
                 return countWhenHasCondition;
             } else {
                 return countWhenNotHaveCondition;
@@ -203,9 +201,9 @@ public class TableOperation {
         }
     }
 
-    public int update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String conditionValues) {
+    public int update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String clmValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
-//        String conditionValues = "'" + clmValues + "'";
+        String conditionValues = "'" + clmValues + "'";
         if (!tableFile.exists()) {
             System.out.println(tableName + " table doesn't exist");
             return 0;
@@ -232,7 +230,7 @@ public class TableOperation {
                 for (int i = 0; i < temp.size(); i++) {
                     if (columns.contains(ee.getKey()) && presentIn.contains(i)) {
                         int index = columns.indexOf(ee.getKey());
-                        temp.set(i, values.get(index));
+                        temp.set(i, "'" +values.get(index) +"'");
                         records.put(ee.getKey(), temp);
                         count++;
                     }
@@ -258,9 +256,9 @@ public class TableOperation {
         }
     }
 
-    public boolean delete(String dbName, String tableName, String conditionColumns, String conditionValues) {
+    public boolean delete(String dbName, String tableName, String conditionColumns, String clmValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
-//        String conditionValues = "'" + clmValues + "'";
+        String conditionValues = "'" + clmValues + "'";
 
         if (!tableFile.exists()) {
             System.out.println("Table Doesn't exist");
