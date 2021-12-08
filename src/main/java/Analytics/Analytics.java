@@ -9,10 +9,28 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Stream;
 
 
 public class Analytics implements AnalyticsService{
+
+    private static Analytics analytics = null;
+//    { DB -> [ tables -> [ insert,update,valid,invalid ] ] }
+    public final Map<String,ArrayList<ArrayList<String>>> DBrecords = new HashMap<String,ArrayList<ArrayList<String>>>();
+//    { DB -> [totalValid, totalInvalid] }
+    public final Map<String,ArrayList<Integer> > DBqueries = new HashMap<String, ArrayList<Integer>>();
+    private Analytics(){};
+
+    public static Analytics getAnalyticsInstance(){
+        if(analytics == null){
+            analytics = new Analytics();
+        }
+        return analytics;
+    }
+
+
 
     @Override
     public void performAnalytics() {
@@ -152,6 +170,13 @@ public class Analytics implements AnalyticsService{
 
     @Override
     public void showAnalytics() {
+
+    }
+
+    public void runner(){
+        System.out.println("");
+        System.out.println(DBqueries.toString());
+        System.out.println("");
 
     }
 }

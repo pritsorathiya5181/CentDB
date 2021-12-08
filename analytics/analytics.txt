@@ -1,16 +1,27 @@
-Total databases in the system : 4
+Total databases in the system : 6
 ===============================================
 
 DB:: Event_Logs.txt (total tables in the database-> 0):
 DB:: General_Logs.txt (total tables in the database-> 0):
-DB:: Query_Logs.txt (total tables in the database-> 0):
-DB:: University (total tables in the database-> 3):
+DB:: KRU (total tables in the database-> 0):
+DB:: ktest (total tables in the database-> 2):
      |
-     |->Student.txt
+     |->dummyTable.txt
+         |
+         |-> total records: 0
+
+     |->dummyTable2.txt
+         |
+         |-> total records: 0
+
+DB:: person (total tables in the database-> 2):
+     |
+     |->dummyPerson1.txt
          |
          |-> total records: 2
 
-     |->University.erd.txt
+     |->dummyPerson2.txt
          |
-         |-> total records: 4
+         |-> total records: 0
 
+DB:: Query_Logs.txt (total tables in the database-> 0):

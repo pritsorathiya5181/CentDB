@@ -1,11 +1,10 @@
 package Query;
 
-import Analytics.*;
+import Analytics.Analytics;
 import erd.ExportERD;
-
-import java.io.IOException;
-import java.util.Scanner;
 import export.ExportDatabase;
+
+import java.util.Scanner;
 
 public class QueryOptions {
     private ExportDatabase exportDatabase;
@@ -14,7 +13,7 @@ public class QueryOptions {
         Scanner sc = new Scanner(System.in);
         QueryParser qp = new QueryParser();
         TableOperation tableOperation = new TableOperation();
-
+        Analytics a = Analytics.getAnalyticsInstance();
         System.out.println("Please select the query operation that you want to perform");
 
         while (true) {
@@ -45,7 +44,7 @@ public class QueryOptions {
                     new ExportERD(dbName).executeGenerateERD();
                 }
                 case "4" -> {
-                    Analytics a = new Analytics();
+                    a.runner();
                     a.performAnalytics();
                 }
                 case "5" -> System.exit(0);
