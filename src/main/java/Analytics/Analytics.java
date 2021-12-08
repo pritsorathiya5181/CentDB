@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 
@@ -71,9 +72,14 @@ public class Analytics implements AnalyticsService{
                     //each table in database
                     //filter data dict
                     int c =0;
+                    ArrayList<String> excludeFiles = new ArrayList<>();
+                    excludeFiles.add("dataDictionary");
+                    excludeFiles.add(database.getName()+".sql");
+
                     for(File d : database.listFiles()){
 
-                        if(!d.getName().split(".txt")[0].equals("dataDictionary")){
+//                        if(!d.getName().split(".txt")[0].equals("dataDictionary")){
+                        if(!excludeFiles.contains(d.getName().split(".txt")[0])){
                             if(c==0){
                                 try {
                                     writter.append("     |\n");
@@ -96,7 +102,12 @@ public class Analytics implements AnalyticsService{
 //                            System.out.println("         |");
                             long lines=-1;
                             try (Stream<String> stream = Files.lines(Path.of(d.getPath()), StandardCharsets.UTF_8)) {
-                                lines = stream.count();
+//                                lines = stream.count();
+                                lines = stream.filter(s->s.length()==0).toList().size() ;
+                                if(lines !=0 ){
+                                    lines +=1;
+                                }
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
