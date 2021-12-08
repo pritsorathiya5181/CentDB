@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TableOperation {
-    public boolean createTable(String dbName, String tableName, ArrayList<String> colName, ArrayList<String> colValue, HashMap<String, String> keySet) {
+    public boolean createTableOperation(String dbName, String tableName, ArrayList<String> colName, ArrayList<String> colValue, HashMap<String, String> keySet) {
         File dictionaryFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/dataDictionary.txt");
         try {
             if (dictionaryFile.createNewFile()) {
@@ -44,7 +44,7 @@ public class TableOperation {
         }
     }
 
-    public boolean insert(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values) {
+    public boolean insertTableOperation(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values) {
         ArrayList<String> pkColValues = new ArrayList<>();
         String tableFilePath = fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt";
         File tableFile = new File(tableFilePath);
@@ -55,12 +55,12 @@ public class TableOperation {
         }
         try {
             Scanner myReader = new Scanner(tableFile);
-            String primaryKey = getPrimaryKeyColumn(dbName, tableName);
+            String primaryKey = getPKColumn(dbName, tableName);
 
             if (primaryKey == null) {
                 System.out.println("No primary key is in table");
             } else {
-                Map<String, ArrayList<String>> records = getRecords(myReader);
+                Map<String, ArrayList<String>> records = fetchRecords(myReader);
                 pkColValues = getColumnValues(primaryKey, records);
             }
 
@@ -105,7 +105,7 @@ public class TableOperation {
         return null;
     }
 
-    private Map<String, ArrayList<String>> getRecords(Scanner myReader) {
+    private Map<String, ArrayList<String>> fetchRecords(Scanner myReader) {
         Map<String, ArrayList<String>> records = new HashMap<>();
         ArrayList<String> temp;
 
@@ -126,7 +126,7 @@ public class TableOperation {
         return records;
     }
 
-    private String getPrimaryKeyColumn(String dbName, String tableName) {
+    private String getPKColumn(String dbName, String tableName) {
         try {
             String dictionaryPath = fileLocation.LOCAL_PATH + "/" + dbName + "/dataDictionary.txt";
             File dataDict = new File(dictionaryPath);
@@ -150,7 +150,7 @@ public class TableOperation {
         }
     }
 
-    public int select(String dbName, String tableName, ArrayList<String> columns, String conditionColumns, String clmValues) {
+    public int selectTableOperation(String dbName, String tableName, ArrayList<String> columns, String conditionColumns, String clmValues) {
         String conditionValues = "'" + clmValues + "'";
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         if (!tableFile.exists()) {
@@ -159,7 +159,7 @@ public class TableOperation {
         }
         try {
             Scanner myReader = new Scanner(tableFile);
-            Map<String, ArrayList<String>> records = getRecords(myReader);
+            Map<String, ArrayList<String>> records = fetchRecords(myReader);
             ArrayList<String> temp;
             ArrayList<Integer> presentIn = new ArrayList<>();
             if (conditionColumns != null) {
@@ -202,7 +202,7 @@ public class TableOperation {
         }
     }
 
-    public int update(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String clmValues) {
+    public int updateTableOperation(String dbName, String tableName, ArrayList<String> columns, ArrayList<String> values, String conditionColumns, String clmValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         String conditionValues = "'" + clmValues + "'";
         if (!tableFile.exists()) {
@@ -211,7 +211,7 @@ public class TableOperation {
         }
         try {
             Scanner myReader = new Scanner(tableFile);
-            Map<String, ArrayList<String>> records = getRecords(myReader);
+            Map<String, ArrayList<String>> records = fetchRecords(myReader);
             ArrayList<Integer> presentIn = new ArrayList<>();
             ArrayList<String> temp;
 
@@ -231,7 +231,7 @@ public class TableOperation {
                 for (int i = 0; i < temp.size(); i++) {
                     if (columns.contains(ee.getKey()) && presentIn.contains(i)) {
                         int index = columns.indexOf(ee.getKey());
-                        temp.set(i, "'" +values.get(index) +"'");
+                        temp.set(i, "'" + values.get(index) + "'");
                         records.put(ee.getKey(), temp);
                         count++;
                     }
@@ -257,7 +257,7 @@ public class TableOperation {
         }
     }
 
-    public boolean delete(String dbName, String tableName, String conditionColumns, String clmValues) {
+    public boolean deleteTableOperation(String dbName, String tableName, String conditionColumns, String clmValues) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         String conditionValues = "'" + clmValues + "'";
 
@@ -267,7 +267,7 @@ public class TableOperation {
         }
         try {
             Scanner myReader = new Scanner(tableFile);
-            Map<String, ArrayList<String>> records = getRecords(myReader);
+            Map<String, ArrayList<String>> records = fetchRecords(myReader);
 
             FileWriter writer = new FileWriter(tableFile, false);
             ArrayList<String> temp;
@@ -317,7 +317,7 @@ public class TableOperation {
         }
     }
 
-    public boolean drop(String dbName, String tableName) {
+    public boolean dropTableOperation(String dbName, String tableName) {
         File tableFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + tableName + ".txt");
         if (!tableFile.exists()) {
             System.out.println("Table Doesn't exist");
@@ -326,40 +326,40 @@ public class TableOperation {
             tableFile.delete();
         }
 
-        File dataDictionaryFile =
-                new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + "dataDictionary.txt");
-        BufferedReader reader = null;
+        File dataDictionaryFile = new File(fileLocation.LOCAL_PATH + "/" + dbName + "/" + "dataDictionary.txt");
+        BufferedReader myReader = null;
         try {
-            reader = new BufferedReader(new FileReader(dataDictionaryFile));
+            myReader = new BufferedReader(new FileReader(dataDictionaryFile));
             String st, tableKey = null;
-            HashMap<String, ArrayList<String>> records = new HashMap<>();
+            HashMap<String, ArrayList<String>> tableRecords = new HashMap<>();
             ArrayList<String> temp = null;
-            while ((st = reader.readLine()) != null) {
+
+            while ((st = myReader.readLine()) != null) {
                 if (st.length() > 0) {
                     String[] array = st.trim().split(" ");
                     if (array.length == 1) {
                         tableKey = st;
                     }
-                    if (records.containsKey(tableKey)) {
-                        temp = new ArrayList<>(records.get(tableKey));
+                    if (tableRecords.containsKey(tableKey)) {
+                        temp = new ArrayList<>(tableRecords.get(tableKey));
                     } else {
                         temp = new ArrayList<>();
                     }
                     temp.add(st);
                 }
-                records.put(tableKey, temp);
+                tableRecords.put(tableKey, temp);
             }
 
             FileWriter writer = null;
             writer = new FileWriter(dataDictionaryFile, false);
-            for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
-                String record = "";
+            for (Map.Entry<String, ArrayList<String>> ee : tableRecords.entrySet()) {
+                StringBuilder rawInput = new StringBuilder();
                 if (!ee.getKey().equals(tableName)) {
                     temp = ee.getValue();
-                    for (int i = 0; i < temp.size(); i++) {
-                        record += temp.get(i) + "\n";
+                    for (String s : temp) {
+                        rawInput.append(s).append("\n");
                     }
-                    writer.write(record);
+                    writer.write(rawInput.toString());
                     writer.flush();
                     writer.write("\n");
                     writer.flush();

@@ -11,14 +11,12 @@ import static Constants.queryRegex.SELECT_QUERY_FINAL;
 import static Constants.queryRegex.TRUNCATE_QUERY_FINAL;
 import static Constants.queryRegex.UPDATE_QUERY_FINAL;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import Constants.fileLocation;
 import LogManagement.LogManagementService;
 
 public class QueryParser {
@@ -173,7 +171,7 @@ public class QueryParser {
 		TableOperation tableOperation = new TableOperation();
 		if (dbOperation.getCurrentDatabase() != null) {
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.createTable(dbOperation.getCurrentDatabase(), tableName, columns, values,
+			boolean status = tableOperation.createTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, values,
 					keySet);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
@@ -212,7 +210,7 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.insert(dbOperation.getCurrentDatabase(), tableName, columns, values);
+			boolean status = tableOperation.insertTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, values);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
@@ -240,7 +238,7 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			int status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns,
+			int status = tableOperation.selectTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns,
 					conditionValues);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
@@ -287,7 +285,7 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			int status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values,
+			int status = tableOperation.updateTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, values,
 					conditionColumns, conditionValues);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
@@ -322,7 +320,7 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn,
+			boolean status = tableOperation.deleteTableOperation(dbOperation.getCurrentDatabase(), tableName, conditionColumn,
 					conditionValue);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
@@ -383,7 +381,7 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.drop(dbOperation.getCurrentDatabase(), tableName);
+			boolean status = tableOperation.dropTableOperation(dbOperation.getCurrentDatabase(), tableName);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
