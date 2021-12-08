@@ -1,6 +1,7 @@
 package Query;
 
 import Analytics.Analytics;
+import Authentication.UserModel;
 import LogManagement.LogManagementService;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import static Constants.queryRegex.*;
 public class QueryParser {
 	DatabaseOperation dbOperation = new DatabaseOperation();
 	Transaction transaction = new Transaction();
-	Analytics analytics = Analytics.getAnalyticsInstance();
+	Analytics analytics = Analytics.getAnalyticsInstance(UserModel.getinstance());
 	public void parseQuery(String query) {
 		Map<String,String> queryLogMap = new HashMap<String,String>();
 		queryLogMap.put(LogManagementService.QUERY_EXECUTED_KEY, query);
@@ -105,41 +106,13 @@ public class QueryParser {
 		long queryEndTime = System.nanoTime();
 		long executionTime = queryEndTime - queryStartTime;
 		if (status) {
-			if(!analytics.DBqueries.containsKey(createDatabaseMatcher.group(1))) {
-				analytics.DBqueries.put(createDatabaseMatcher.group(1),new ArrayList<>(){
-					{
-						add(1);add(0);
-					}
-				});
-			}
-			else {
-				analytics.DBqueries.computeIfPresent(createDatabaseMatcher.group(1),(k,v)->new ArrayList<Integer>(){
-					{
-						add(v.get(0)+1);
-						add(v.get(1));
-					}
-				});
-			}
+			analytics.DbAnalysis(createDatabaseMatcher.group(1),true);
 			createDbLogMap.put(LogManagementService.DB_CHANGE_KEY,
 					"Database " + createDatabaseMatcher.group(1) + " has been created. 0 row(s) affected.");
 			LogManagementService.getInstance().writeLog(createDbLogMap);
 			System.out.println("Created database: " + createDatabaseMatcher.group(1));
 		} else {
-			if(!analytics.DBqueries.containsKey(createDatabaseMatcher.group(1))) {
-				analytics.DBqueries.put(createDatabaseMatcher.group(1),new ArrayList<>(){
-					{
-						add(0);add(1);
-					}
-				});
-			}
-			else {
-				analytics.DBqueries.computeIfPresent(createDatabaseMatcher.group(1),(k,v)->new ArrayList<Integer>(){
-					{
-						add(v.get(0));
-						add(v.get(1)+1);
-					}
-				});
-			}
+			analytics.DbAnalysis(createDatabaseMatcher.group(1),false);
 			createDbLogMap.put(LogManagementService.DB_CHANGE_KEY, "Failed to create database. 0 row(s) affected.");
 			LogManagementService.getInstance().writeLog(createDbLogMap);
 		}
@@ -158,23 +131,7 @@ public class QueryParser {
 		long executionTime = queryEndTime - queryStartTime;
 		if (status) {
 
-			//databse queries
-//			analytics.DBqueries.put()
-			if(!analytics.DBqueries.containsKey(useDatabaseMatcher.group(1))) {
-				analytics.DBqueries.put(useDatabaseMatcher.group(1),new ArrayList<>(){
-					{
-						add(1);add(0);
-					}
-				});
-			}
-			else {
-				analytics.DBqueries.computeIfPresent(useDatabaseMatcher.group(1),(k,v)->new ArrayList<Integer>(){
-					{
-						add(v.get(0)+1);
-						add(v.get(1));
-					}
-				});
-			}
+			analytics.DbAnalysis(useDatabaseMatcher.group(1),true);
 
 			System.out.println(analytics.DBqueries);
 
@@ -183,22 +140,7 @@ public class QueryParser {
 			System.out.println("Switched the database");
 		} else {
 
-			//databse queries
-			if(!analytics.DBqueries.containsKey(useDatabaseMatcher.group(1))) {
-				analytics.DBqueries.put(useDatabaseMatcher.group(1),new ArrayList<>(){
-					{
-						add(0);add(1);
-					}
-				});
-			}
-			else {
-				analytics.DBqueries.computeIfPresent(useDatabaseMatcher.group(1),(k,v)->new ArrayList<Integer>(){
-					{
-						add(v.get(0));
-						add(v.get(1)+1);
-					}
-				});
-			}
+			analytics.DbAnalysis(useDatabaseMatcher.group(1),false);
 			System.out.println(analytics.DBqueries);
 
 			useDbLogMap.put(LogManagementService.DB_CHANGE_KEY, useDatabaseMatcher.group(1) + "' database is not available. 0 row(s) affected.");
@@ -244,44 +186,14 @@ public class QueryParser {
 
 			if (status) {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(1);add(0);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0)+1);
-							add(v.get(1));
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
 
 				createTableLogMap.put(LogManagementService.DB_CHANGE_KEY, tableName + " table created in database. 0 row(s) affected.");
 				LogManagementService.getInstance().writeLog(createTableLogMap);
 				System.out.println("Successfully creation of new table: " + tableName + " in database: "
 						+ dbOperation.getCurrentDatabase());
 			} else {
-
-				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(0);add(1);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0));
-							add(v.get(1)+1);
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
 				createTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Failed to create table " + tableName + ". 0 row(s) affected.");
 				LogManagementService.getInstance().writeLog(createTableLogMap);
 				System.out.println("Failure creation of new table: " + tableName + " in database: "
@@ -315,41 +227,12 @@ public class QueryParser {
 			long executionTime = queryEndTime - queryStartTime;
 
 			if (status) {
-				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(1);add(0);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0)+1);
-							add(v.get(1));
-						}
-					});
-				}
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,true,true);
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
 				System.out.println("Successfully inserted into the table");
 			} else {
-
-				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(0);add(1);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0));
-							add(v.get(1)+1);
-						}
-					});
-				}
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,true,false);
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
 				System.out.println("Failure insertion of new entry in: " + tableName + " table");
 			}
 			return status;
@@ -378,41 +261,12 @@ public class QueryParser {
 
 			if (status > 0) {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(1);add(0);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0)+1);
-							add(v.get(1));
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
 				selectTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Rows affected: " + status);
 				LogManagementService.getInstance().writeLog(selectTableLogMap);
 				System.out.println("Successfully performed select query on the " + tableName + " table");
 			} else {
-				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(0);add(1);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0));
-							add(v.get(1)+1);
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
 				System.out.println("Failure to perform selection query on the " + tableName + " table");
 				selectTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Selection query not performed");
 				LogManagementService.getInstance().writeLog(selectTableLogMap);
@@ -458,41 +312,17 @@ public class QueryParser {
 			System.out.println("status===" + status);
 			if (status > 0) {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(1);add(0);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0)+1);
-							add(v.get(1));
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,false,true);
+
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Update successful. Rows affected: " + status);
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Successfully updated into the table");
 			} else {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(0);add(1);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0));
-							add(v.get(1)+1);
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,false,false);
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Update failed. Rows affected: 0");
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Failure updating of new entry in: " + tableName + " table");
@@ -524,41 +354,13 @@ public class QueryParser {
 
 			if (status) {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(1);add(0);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0)+1);
-							add(v.get(1));
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Deleted row. 1 row(s) affected.");
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Successfully deleted entry from the table");
 			} else {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(0);add(1);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0));
-							add(v.get(1)+1);
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Deletion failed. 0 row(s) affected.");
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Failure deleting of new entry in: " + tableName + " table");
@@ -617,41 +419,13 @@ public class QueryParser {
 
 			if (status) {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(1);add(0);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0)+1);
-							add(v.get(1));
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
 				dropTableLogMap.put(LogManagementService.DB_CHANGE_KEY, tableName + " table dropped !");
 				LogManagementService.getInstance().writeLog(dropTableLogMap);
 				System.out.println("Successfully dropped the table");
 			} else {
 				//databse queries
-				if(!analytics.DBqueries.containsKey(dbOperation.getCurrentDatabase())) {
-					analytics.DBqueries.put(dbOperation.getCurrentDatabase(),new ArrayList<>(){
-						{
-							add(0);add(1);
-						}
-					});
-				}
-				else {
-					analytics.DBqueries.computeIfPresent(dbOperation.getCurrentDatabase(),(k,v)->new ArrayList<Integer>(){
-						{
-							add(v.get(0));
-							add(v.get(1)+1);
-						}
-					});
-				}
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
 				dropTableLogMap.put(LogManagementService.DB_CHANGE_KEY, tableName + " table failed to drop !");
 				LogManagementService.getInstance().writeLog(dropTableLogMap);
 				System.out.println("Failure to drop the " + tableName + " table");

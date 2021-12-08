@@ -1,5 +1,7 @@
 package Query;
 
+import Authentication.UserModel;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -10,7 +12,7 @@ public class Transaction {
 
     public void processTransaction() {
         ArrayList<String> transactionQueryList = new ArrayList<>();
-        QueryOptions qp = new QueryOptions();
+        QueryOptions qp = new QueryOptions(UserModel.getinstance());
         Scanner sc = new Scanner(System.in);
         String query = "";
         while (true) {

@@ -1,6 +1,7 @@
 package Query;
 
 import Analytics.Analytics;
+import Authentication.UserModel;
 import erd.ExportERD;
 import export.ExportDatabase;
 
@@ -8,12 +9,16 @@ import java.util.Scanner;
 
 public class QueryOptions {
     private ExportDatabase exportDatabase;
+    private UserModel user = null;
+    public QueryOptions (UserModel authenticatedUser){
+        user=authenticatedUser;
+    }
 
     public void listQueryOptions() {
         Scanner sc = new Scanner(System.in);
         QueryParser qp = new QueryParser();
         TableOperation tableOperation = new TableOperation();
-        Analytics a = Analytics.getAnalyticsInstance();
+        Analytics a = Analytics.getAnalyticsInstance(user);
         System.out.println("Please select the query operation that you want to perform");
 
         while (true) {
@@ -45,7 +50,7 @@ public class QueryOptions {
                 }
                 case "4" -> {
                     a.runner();
-                    a.performAnalytics();
+//                    a.performAnalytics();
                 }
                 case "5" -> System.exit(0);
             }

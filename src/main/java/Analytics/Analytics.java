@@ -1,5 +1,6 @@
 package Analytics;
 
+import Authentication.UserModel;
 import Constants.fileLocation;
 
 import java.io.File;
@@ -8,29 +9,107 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 
 public class Analytics implements AnalyticsService{
 
     private static Analytics analytics = null;
-//    { DB -> [ tables -> [ insert,update,valid,invalid ] ] }
-    public final Map<String,ArrayList<ArrayList<String>>> DBrecords = new HashMap<String,ArrayList<ArrayList<String>>>();
+//    { DB_tables -> [ insert,update,valid,invalid ]  }
+    public final Map<String,ArrayList<Integer>> DBrecords = new HashMap<String,ArrayList<Integer>>();
 //    { DB -> [totalValid, totalInvalid] }
     public final Map<String,ArrayList<Integer> > DBqueries = new HashMap<String, ArrayList<Integer>>();
-    private Analytics(){};
 
-    public static Analytics getAnalyticsInstance(){
+    private UserModel user = null;
+    private Analytics(UserModel active){
+        user = active;
+    };
+
+    public static Analytics getAnalyticsInstance(UserModel activeUser){
         if(analytics == null){
-            analytics = new Analytics();
+            analytics = new Analytics(activeUser);
         }
         return analytics;
     }
 
+    public void DbAnalysis(String Db,boolean valid){
+        if(!DBqueries.containsKey(Db)) {
+            DBqueries.put(Db,new ArrayList<>(){
+                {
+                    if (valid) {
+                        add(1);
+                        add(0);
+                    } else {
+                        add(0);
+                        add(1);
+                    }
+                }
+            });
+        }
+        else {
+            analytics.DBqueries.computeIfPresent(Db,(k,v)->new ArrayList<Integer>(){
+                {
+                    if (valid) {
+                        add(v.get(0) + 1);
+                        add(v.get(1));
+                    } else {
+                        add(v.get(0));
+                        add(v.get(1)+1);
+                    }
+                }
+            });
+        }
+    }
 
+    public void tableAnalytics(String Db,String table,boolean insert,boolean valid){
+        String db = Db + "_"+table;
+        if(!DBrecords.containsKey(db)){
+            DBrecords.put(db,new ArrayList<>(){
+                {
+                    if (insert ) {
+                        add(1);
+                        add(0);
+                    } else {
+                        add(0);
+                        add(1);
+                    }
+
+                    if (valid) {
+                        add(1);
+                        add(0);
+                    } else {
+                        add(0);
+                        add(1);
+                    }
+
+                }
+            });
+        }
+        else{
+            DBrecords.computeIfPresent(db,(k,v)->
+               new ArrayList<>(){
+                   {
+                       if (insert ) {
+                           add(v.get(0)+1);
+                           add(v.get(1));
+                       } else {
+                           add(v.get(0));
+                           add(v.get(1)+1);
+                       }
+
+                       if (valid) {
+                           add(v.get(2)+1);
+                           add(v.get(3));
+                       } else {
+                           add(v.get(2));
+                           add(v.get(3)+1);
+                       }
+                   }
+               }
+            );
+        }
+    }
 
     @Override
     public void performAnalytics() {
@@ -174,9 +253,110 @@ public class Analytics implements AnalyticsService{
     }
 
     public void runner(){
-        System.out.println("");
-        System.out.println(DBqueries.toString());
-        System.out.println("");
+
+
+
+
+        while (true){
+            System.out.println("1) enter a query");
+            System.out.println("2) perform system wide analytics");
+            System.out.println("3) back");
+
+            System.out.print("Enter : ");
+            Scanner sc = new Scanner(System.in);
+            int option =0;
+            try{
+                option = sc.nextInt();
+            }
+            catch (InputMismatchException ignored){
+            }
+
+            if(option == 3 || option == 0){
+                break;
+            }
+
+            switch (option){
+                case 1->{
+                    //count queries on DB
+                    Scanner _sc = new Scanner(System.in);
+                    System.out.print("query - >");
+                    String query = _sc.nextLine();
+                    String [] q = query.split(" ");
+                    if(q[0].equals("count") && q[1].equals("queries")){
+                        if(DBqueries.keySet().size() > 0){
+                            int valid =DBqueries.get(q[3]).get(0);
+                            int invalid = DBqueries.get(q[3]).get(1);
+                            int total = valid +invalid;
+                            System.out.println("User "+
+                                    user.getUsername() +
+                                    " performed "+
+                                    total+
+                                    "queries ( valid: " +
+                                    valid +
+                                    " | invalid: " +
+                                    invalid
+
+                            );
+                        }
+                        else {
+                            System.out.println("No DB present");
+                        }
+
+                    }
+                    //count updates on DB.table
+                    //count inserts on DB.table
+//                    { DB_tables -> [ insert,update,valid,invalid ]  }
+                    if(q[1].equals("updates")){
+                        if(DBrecords.keySet().size() > 0){
+                            for (Map.Entry<String,ArrayList<Integer>> entry : DBrecords.entrySet()){
+                                if(entry.getKey().contains(q[3].split(".")[0])){
+                                    if(entry.getKey().contains(q[3].split(".")[1])){
+                                        System.out.printf("Total %d updates were performed on %s (Valid: %d | invalid: %d)"
+                                                ,entry.getValue().get(1)
+                                                ,q[3].split(".")[1]
+                                                ,entry.getValue().get(2)
+                                                ,entry.getValue().get(3));
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            System.out.println("No DB present");
+                        }
+
+                    }
+                    if(q[1].equals("inserts")){
+                        if(DBrecords.keySet().size() > 0){
+                            for (Map.Entry<String,ArrayList<Integer>> entry : DBrecords.entrySet()){
+                                if(entry.getKey().contains(q[3].split(".")[0])){
+                                    if(entry.getKey().contains(q[3].split(".")[1])){
+                                        System.out.printf("Total %d inserts were performed on %s (Valid: %d | invalid: %d)"
+                                                ,entry.getValue().get(1)
+                                                ,q[3].split(".")[1]
+                                                ,entry.getValue().get(2)
+                                                ,entry.getValue().get(3));
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            System.out.println("No DB present");
+                        }
+
+                    }
+                }
+                case 2->{
+                    this.performAnalytics();
+                    System.out.println("performing system wide analytics...");
+                    System.out.println("Done, check the analytics.txt file");
+
+                }
+
+            }
+
+
+        }
+
 
     }
 }
