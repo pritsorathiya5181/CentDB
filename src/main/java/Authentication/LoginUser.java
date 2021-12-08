@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class LoginUser {
-    public UserModel LoginUser = new UserModel();
+    public UserModel LoginUser = UserModel.getinstance();
 
     public boolean login() throws FileNotFoundException, NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);

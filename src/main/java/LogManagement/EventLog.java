@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class EventLog {
-    //	private String eventLogsFilePath = "/Users/vibhorbhatnagar/Desktop/Event_Logs.txt";
+  
     private String eventLogsFilePath = fileLocation.LOCAL_PATH + "/Event_Logs.txt";
 
     private File file;
@@ -44,9 +44,9 @@ public class EventLog {
         try {
             Calendar calendar = Calendar.getInstance();
             StringBuffer sb = new StringBuffer();
-            sb.append("{").append(calendar.getTime()).append("}");
-            sb.append("{").append(UserModel.getinstance().getUsername()).append("}");
-            sb.append("{");
+            sb.append("<").append(calendar.getTime()).append(">");
+            sb.append("<").append(UserModel.getinstance().getUsername()).append(">");
+            sb.append("<");
             if (eventInformationMap.containsKey(LogManagementService.DB_CHANGE_KEY)) {
                 sb.append("Database changes are: ").append(eventInformationMap.get(LogManagementService.DB_CHANGE_KEY));
             }
@@ -56,6 +56,7 @@ public class EventLog {
             if (eventInformationMap.containsKey(LogManagementService.DB_CRASH_KEY)) {
                 sb.append("Database crashed due to: ").append(eventInformationMap.get(LogManagementService.DB_CRASH_KEY));
             }
+            sb.append(">");
             this.bw.newLine();
             this.bw.append(sb.toString());
             this.bw.flush();

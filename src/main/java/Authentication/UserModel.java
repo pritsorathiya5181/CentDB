@@ -16,7 +16,7 @@ public class UserModel {
     	return instance;
     }
     
-    public UserModel() {
+    private UserModel() {
     	
     }
 

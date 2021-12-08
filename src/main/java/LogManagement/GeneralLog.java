@@ -10,8 +10,8 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class GeneralLog {
-    //	private String generalLogsFilePath = "/Users/vibhorbhatnagar/Desktop/General_Logs.txt";
-    private String generalLogsFilePath = fileLocation.LOCAL_PATH + "/Event_Logs.txt";
+ 
+    private String generalLogsFilePath = fileLocation.LOCAL_PATH + "/General_Logs.txt";
 
     private File file;
     private java.io.FileWriter generalLogFileWriter;
@@ -44,11 +44,11 @@ public class GeneralLog {
         try {
             Calendar calendar = Calendar.getInstance();
             StringBuffer sb = new StringBuffer();
-            sb.append("{").append(calendar.getTime()).append("}");
-            sb.append("{").append(UserModel.getinstance().getUsername()).append("}");
-            sb.append("{").append("Execution time for this query: ")
+            sb.append("<").append(calendar.getTime()).append(">");
+            sb.append("<").append(UserModel.getinstance().getUsername()).append(">");
+            sb.append("<").append("Execution time for this query: ")
                     .append(generalInformationMap.get(LogManagementService.EXECUTION_TIME_KEY)).append(". DB State is: ")
-                    .append(generalInformationMap.get(LogManagementService.DB_STATE_KEY)).append("}");
+                    .append(generalInformationMap.get(LogManagementService.DB_STATE_KEY)).append(">");
             this.bw.newLine();
             this.bw.append(sb.toString());
             this.bw.flush();

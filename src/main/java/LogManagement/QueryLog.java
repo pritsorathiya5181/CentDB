@@ -10,8 +10,8 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class QueryLog {
-//	private String queryLogFilePath = "/Users/vibhorbhatnagar/Desktop/Query_Logs.txt";
-	private String queryLogFilePath = fileLocation.LOCAL_PATH + "/Event_Logs.txt";
+
+	private String queryLogFilePath = fileLocation.LOCAL_PATH + "/Query_Logs.txt";
 	
 	private File file;
 	private java.io.FileWriter queryFileWriter;
@@ -44,9 +44,9 @@ public class QueryLog {
 		try {
 			Calendar calendar = Calendar.getInstance();
 			StringBuffer sb = new StringBuffer();
-			sb.append("{").append(calendar.getTimeZone()).append("}");
-			sb.append("{").append(UserModel.getinstance().getUsername()).append("}");
-			sb.append("{").append("User Query: ").append(infoMap.get(0)).append("}");
+			sb.append("<").append(calendar.getTime()).append(">");
+			sb.append("<").append(UserModel.getinstance().getUsername()).append(">");
+			sb.append("<").append("User Query: ").append(infoMap.get(LogManagementService.QUERY_EXECUTED_KEY)).append(">");
 			this.bw.newLine();
 			this.bw.append(sb.toString());
 			this.bw.flush();

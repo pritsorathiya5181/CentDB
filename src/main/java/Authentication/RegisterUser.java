@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class RegisterUser {
 
-    public UserModel RegisteringUser = new UserModel();
+    public UserModel RegisteringUser = UserModel.getinstance();
     ArrayList<String> questions = new ArrayList<String>() {
         {
             add("In what city were you born?");
