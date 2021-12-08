@@ -123,7 +123,7 @@ public class ExportERD {
                 String constraints = this.databaseTableColumnConstraintMap.get(tableName).get(entry.getKey());
                 sqlExportStringBuilder
                         .append(String.format(TABLE_FORMAT_STRING, "|", entry.getKey(), "|",
-                                entry.getValue(), "|", constraints, "|") + "\n");
+                                entry.getValue(), "|", constraints == null ? "-" : constraints, "|") + "\n");
             }
             sqlExportStringBuilder
                     .append(String.format(TABLE_FORMAT_STRING, "--", "--------------------------", "--",
