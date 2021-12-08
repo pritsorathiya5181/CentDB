@@ -1,18 +1,18 @@
 package Home;
 
-
 import Authentication.*;
 import Query.*;
 
 import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
+
 public class SystemOptions {
 
     public static void main(String[] args) throws NoSuchAlgorithmException, FileNotFoundException {
-        UserModel activeUser=null;
+        UserModel activeUser = null;
         System.out.println("Welcome!");
-        while (true){
+        while (true) {
             System.out.println("1. Register User");
             System.out.println("2. Login User");
             System.out.println("3. Exit");
@@ -24,7 +24,7 @@ public class SystemOptions {
                 case 1 -> {
                     RegisterUser registerUser = new RegisterUser();
                     boolean register = registerUser.register();
-                    if(register) {
+                    if (register) {
                         activeUser = registerUser.RegisteringUser;
                         System.out.println("Registered Successfully");
                     } else {
@@ -34,7 +34,7 @@ public class SystemOptions {
                 case 2 -> {
                     LoginUser loginUser = new LoginUser();
                     boolean login = loginUser.login();
-                    if(login) {
+                    if (login) {
                         System.out.println("User logged in");
                         activeUser = loginUser.LoginUser;
                         QueryOptions options = new QueryOptions();

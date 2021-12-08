@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
+import export.ExportDatabase;
+
 import static Constants.queryRegex.*;
 
 public class QueryParser {
@@ -24,7 +26,7 @@ public class QueryParser {
         Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
         Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
         Matcher beginTransactionMatcher = BEGIN_TRANSACTION_QUERY_FINAL.matcher(query);
-
+        Matcher exportDatabaseMatcher = DATABASE_EXPORT_QUERY_FINAL.matcher(query);
 
         if (createDatabaseMatcher.find()) {
             createDatabase(createDatabaseMatcher);
@@ -84,6 +86,8 @@ public class QueryParser {
             Transaction transactionQuery = new Transaction();
             System.out.println("Transaction Begins");
             transactionQuery.processTransaction();
+        } else if (exportDatabaseMatcher.find()) {
+            new ExportDatabase(exportDatabaseMatcher.group(1));
         } else {
             System.out.println("Please enter a valid query");
         }
@@ -91,7 +95,7 @@ public class QueryParser {
 
     public void createDatabase(Matcher createDatabaseMatcher) {
         boolean status = dbOperation.createDb(createDatabaseMatcher.group(1));
-//        System.out.println("create db status===" + status);
+        // System.out.println("create db status===" + status);
         if (status) {
             System.out.println("Created database: " + createDatabaseMatcher.group(1));
         }
@@ -129,11 +133,14 @@ public class QueryParser {
 
         TableOperation tableOperation = new TableOperation();
         if (dbOperation.getCurrentDatabase() != null) {
-            boolean status = tableOperation.createTable(dbOperation.getCurrentDatabase(), tableName, columns, values, keySet);
+            boolean status = tableOperation.createTable(dbOperation.getCurrentDatabase(), tableName, columns, values,
+                    keySet);
             if (status) {
-                System.out.println("Successfully creation of new table: " + tableName + " in database: " + dbOperation.getCurrentDatabase());
+                System.out.println("Successfully creation of new table: " + tableName + " in database: "
+                        + dbOperation.getCurrentDatabase());
             } else {
-                System.out.println("Failure creation of new table: " + tableName + " in database: " + dbOperation.getCurrentDatabase());
+                System.out.println("Failure creation of new table: " + tableName + " in database: "
+                        + dbOperation.getCurrentDatabase());
             }
         } else {
             System.out.println("Please select database");
@@ -174,7 +181,8 @@ public class QueryParser {
 
         if (dbOperation.getCurrentDatabase() != null) {
             TableOperation tableOperation = new TableOperation();
-            boolean status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns, conditionValues);
+            boolean status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns,
+                    conditionColumns, conditionValues);
 
             if (status) {
                 System.out.println("Successfully performed select query on the " + tableName + " table");
@@ -207,7 +215,8 @@ public class QueryParser {
 
         if (dbOperation.getCurrentDatabase() != null) {
             TableOperation tableOperation = new TableOperation();
-            boolean status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values, conditionColumns, conditionValues);
+            boolean status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values,
+                    conditionColumns, conditionValues);
 
             if (status) {
                 System.out.println("Successfully updated into the table");
@@ -227,8 +236,8 @@ public class QueryParser {
 
         if (dbOperation.getCurrentDatabase() != null) {
             TableOperation tableOperation = new TableOperation();
-            boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn, conditionValue);
-
+            boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn,
+                    conditionValue);
             if (status) {
                 System.out.println("Successfully deleted entry from the table");
             } else {
