@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
+import export.ExportDatabase;
+
 import static Constants.queryRegex.*;
 
 public class QueryParser {
@@ -26,6 +28,7 @@ public class QueryParser {
         Matcher beginTransactionMatcher = BEGIN_TRANSACTION_QUERY_FINAL.matcher(query);
 
         boolean queeryStatus = false;
+        Matcher exportDatabaseMatcher = DATABASE_EXPORT_QUERY_FINAL.matcher(query);
 
         if (createDatabaseMatcher.find()) {
             queeryStatus = createDatabase(createDatabaseMatcher);
@@ -85,6 +88,8 @@ public class QueryParser {
             Transaction transactionQuery = new Transaction();
             System.out.println("Transaction Begins");
             transactionQuery.processTransaction();
+        } else if (exportDatabaseMatcher.find()) {
+            new ExportDatabase(exportDatabaseMatcher.group(1));
         } else {
             System.out.println("Please enter a valid query");
         }
@@ -95,16 +100,16 @@ public class QueryParser {
         boolean status = dbOperation.createDb(createDatabaseMatcher.group(1));
         long queryEndTime = System.nanoTime();
         long executionTime = queryEndTime - queryStartTime;
-//        System.out.println("create db status===" + status);
+        // System.out.println("create db status===" + status);
         if (status) {
-            //TODO: ADD EVENT LOG HERE : SUCCESS
+            // TODO: ADD EVENT LOG HERE : SUCCESS
             System.out.println("Created database: " + createDatabaseMatcher.group(1));
             return true;
         } else {
             //TODO: ADD EVENT LOG HERE : FAILURE
             return false;
         }
-        //TODO: ADD GENERAL LOG HERE
+        // TODO: ADD GENERAL LOG HERE
     }
 
     public boolean useDatabase(Matcher useDatabaseMatcher) {
@@ -145,7 +150,8 @@ public class QueryParser {
         TableOperation tableOperation = new TableOperation();
         if (dbOperation.getCurrentDatabase() != null) {
             long queryStartTime = System.nanoTime();
-            boolean status = tableOperation.createTable(dbOperation.getCurrentDatabase(), tableName, columns, values, keySet);
+            boolean status = tableOperation.createTable(dbOperation.getCurrentDatabase(), tableName, columns, values,
+                    keySet);
             long queryEndTime = System.nanoTime();
             long executionTime = queryEndTime - queryStartTime;
 
@@ -203,20 +209,22 @@ public class QueryParser {
         if (dbOperation.getCurrentDatabase() != null) {
             TableOperation tableOperation = new TableOperation();
             long queryStartTime = System.nanoTime();
-            int status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns, conditionValues);
+            int status = tableOperation.select(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns,
+                    conditionValues);
             long queryEndTime = System.nanoTime();
             long executionTime = queryEndTime - queryStartTime;
 
             if (status > 0) {
-                //TODO: ADD EVENT LOG HERE : SUCCESS  - status is count of number of raws are affected
+                // TODO: ADD EVENT LOG HERE : SUCCESS - status is count of number of raws are
+                // affected
                 System.out.println("Successfully performed select query on the " + tableName + " table");
                 return true;
             } else {
-                //TODO: ADD EVENT LOG HERE : FAILURE
+                // TODO: ADD EVENT LOG HERE : FAILURE
                 System.out.println("Failure to perform selection query on the " + tableName + " table");
                 return false;
             }
-            //TODO: ADD GENERAL LOG HERE
+            // TODO: ADD GENERAL LOG HERE
         } else {
             System.out.println("Please select database");
             return false;
@@ -245,17 +253,19 @@ public class QueryParser {
         if (dbOperation.getCurrentDatabase() != null) {
             TableOperation tableOperation = new TableOperation();
             long queryStartTime = System.nanoTime();
-            int status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values, conditionColumns, conditionValues);
+            int status = tableOperation.update(dbOperation.getCurrentDatabase(), tableName, columns, values,
+                    conditionColumns, conditionValues);
             long queryEndTime = System.nanoTime();
             long executionTime = queryEndTime - queryStartTime;
 
             System.out.println("status===" + status);
             if (status > 0) {
-                //TODO: ADD EVENT LOG HERE : SUCCESS  - status is count of number of raws are affected
+                // TODO: ADD EVENT LOG HERE : SUCCESS - status is count of number of raws are
+                // affected
                 System.out.println("Successfully updated into the table");
                 return true;
             } else {
-                //TODO: ADD EVENT LOG HERE : FAILURE
+                // TODO: ADD EVENT LOG HERE : FAILURE
                 System.out.println("Failure updating of new entry in: " + tableName + " table");
                 return false;
             }
@@ -263,7 +273,7 @@ public class QueryParser {
             System.out.println("Please select database");
             return false;
         }
-        //TODO: ADD GENERAL LOG HERE
+        // TODO: ADD GENERAL LOG HERE
     }
 
     public boolean deleteTable(Matcher deleMatcher) {
@@ -275,7 +285,8 @@ public class QueryParser {
         if (dbOperation.getCurrentDatabase() != null) {
             TableOperation tableOperation = new TableOperation();
             long queryStartTime = System.nanoTime();
-            boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn, conditionValue);
+            boolean status = tableOperation.delete(dbOperation.getCurrentDatabase(), tableName, conditionColumn,
+                    conditionValue);
             long queryEndTime = System.nanoTime();
             long executionTime = queryEndTime - queryStartTime;
 
