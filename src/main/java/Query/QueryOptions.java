@@ -1,6 +1,7 @@
 package Query;
 
 import Analytics.*;
+import erd.ExportERD;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -41,11 +42,7 @@ public class QueryOptions {
                 case "3" -> {
                     System.out.println("Please enter database name");
                     String dbName = sc.nextLine();
-                    try {
-                        tableOperation.erd(dbName);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    new ExportERD(dbName).executeGenerateERD();
                 }
                 case "4" -> {
                     Analytics a = new Analytics();
