@@ -1,0 +1,16 @@
+Total databases in the system : 4
+===============================================
+
+DB:: Event_Logs.txt (total tables in the database-> 0):
+DB:: General_Logs.txt (total tables in the database-> 0):
+DB:: Query_Logs.txt (total tables in the database-> 0):
+DB:: University (total tables in the database-> 3):
+     |
+     |->Student.txt
+         |
+         |-> total records: 2
+
+     |->University.erd.txt
+         |
+         |-> total records: 4
+

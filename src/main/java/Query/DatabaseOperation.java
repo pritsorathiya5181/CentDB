@@ -1,6 +1,6 @@
 package Query;
 
-import Constants.fileLocation;
+import Constants.*;
 
 import java.io.File;
 
@@ -20,12 +20,23 @@ public class DatabaseOperation {
         File dbFolder = new File(fileLocation.LOCAL_PATH+"/"+dbName);
         if(!dbFolder.exists()) {
             status = dbFolder.mkdir();
+        } else {
+            System.out.println(dbName+" database is already exists");
         }
-        System.out.println(dbName+" database is already exists");
         return status;
     }
 
-    public void useDb(String dbName){
-        setCurrentDatabase(dbName);
+    public boolean useDb(String dbName){
+        String[] pathnames;
+        File myFile = new File(fileLocation.LOCAL_PATH);
+        pathnames = myFile.list();
+
+        for (String pathname : pathnames) {
+            if(pathname.equals(dbName)) {
+                setCurrentDatabase(dbName);
+                return true;
+            }
+        }
+        return false;
     }
 }
