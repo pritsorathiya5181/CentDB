@@ -44,6 +44,9 @@ public class queryRegex {
     public static String ROLLBACK_TRANSACTION_QUERY = "ROLLBACK;";
     public static Pattern ROLLBACK_TRANSACTION_QUERY_FINAL = Pattern.compile(ROLLBACK_TRANSACTION_QUERY);
 
-    public static String DATABASE_EXPORT_QUERY = "(EXPORT|export)\\s(\\w+);";
+    public static String DATABASE_EXPORT_QUERY = "EXPORT\\s(\\w*);";
     public static final Pattern DATABASE_EXPORT_QUERY_FINAL = Pattern.compile(DATABASE_EXPORT_QUERY);
+
+    public static String DATABASE_EXPORT_ERD_QUERY = "EXPORT ERD\\s(\\w*);";
+    public static final Pattern DATABASE_EXPORT_ERD_QUERY_FINAL = Pattern.compile(DATABASE_EXPORT_ERD_QUERY);
 }

@@ -3,6 +3,8 @@ package Query;
 import Analytics.Analytics;
 import Authentication.UserModel;
 import LogManagement.LogManagementService;
+import erd.ExportERD;
+import export.ExportDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,12 +18,13 @@ public class QueryParser {
 	DatabaseOperation dbOperation = new DatabaseOperation();
 	Transaction transaction = new Transaction();
 	Analytics analytics = Analytics.getAnalyticsInstance(UserModel.getinstance());
+
 	public void parseQuery(String query) {
-		Map<String,String> queryLogMap = new HashMap<String,String>();
+		Map<String, String> queryLogMap = new HashMap<String, String>();
 		queryLogMap.put(LogManagementService.QUERY_EXECUTED_KEY, query);
 		LogManagementService.getInstance().writeLog(queryLogMap);
 		System.out.println("current database==" + dbOperation.getCurrentDatabase());
-		
+
 		Matcher createMatcher = CREATE_QUERY_FINAL.matcher(query);
 		Matcher createDatabaseMatcher = DATABASE_CREATE_FINAL.matcher(query);
 		Matcher useDatabaseMatcher = DATABASE_USE_FINAL.matcher(query);
@@ -32,9 +35,11 @@ public class QueryParser {
 		Matcher truncateMatcher = TRUNCATE_QUERY_FINAL.matcher(query);
 		Matcher dropMatcher = DROP_QUERY_FINAL.matcher(query);
 		Matcher beginTransactionMatcher = BEGIN_TRANSACTION_QUERY_FINAL.matcher(query);
+		Matcher databaseExportMatcher = DATABASE_EXPORT_QUERY_FINAL.matcher(query);
+		Matcher databaseExportERDMatcher = DATABASE_EXPORT_ERD_QUERY_FINAL.matcher(query);
 
-		//TOTAL queries DATABASE
-		//INSERT and UPDATE for tables
+		// TOTAL queries DATABASE
+		// INSERT and UPDATE for tables
 
 		if (createDatabaseMatcher.find()) {
 			createDatabase(createDatabaseMatcher);
@@ -94,25 +99,29 @@ public class QueryParser {
 			Transaction transactionQuery = new Transaction();
 			System.out.println("Transaction Begins");
 			transactionQuery.processTransaction();
+		} else if (databaseExportMatcher.find()) {
+			new ExportDatabase(databaseExportMatcher.group(1).trim()).executeExport();
+		} else if (databaseExportERDMatcher.find()) {
+			new ExportERD(databaseExportERDMatcher.group(1).trim()).executeGenerateERD();
 		} else {
 			System.out.println("Please enter a valid query");
 		}
 	}
 
 	public boolean createDatabase(Matcher createDatabaseMatcher) {
-		Map<String, String> createDbLogMap = new HashMap<String,String>();
+		Map<String, String> createDbLogMap = new HashMap<String, String>();
 		long queryStartTime = System.nanoTime();
 		boolean status = dbOperation.createDb(createDatabaseMatcher.group(1));
 		long queryEndTime = System.nanoTime();
 		long executionTime = queryEndTime - queryStartTime;
 		if (status) {
-			analytics.DbAnalysis(createDatabaseMatcher.group(1),true);
+			analytics.DbAnalysis(createDatabaseMatcher.group(1), true);
 			createDbLogMap.put(LogManagementService.DB_CHANGE_KEY,
 					"Database " + createDatabaseMatcher.group(1) + " has been created. 0 row(s) affected.");
 			LogManagementService.getInstance().writeLog(createDbLogMap);
 			System.out.println("Created database: " + createDatabaseMatcher.group(1));
 		} else {
-			analytics.DbAnalysis(createDatabaseMatcher.group(1),false);
+			analytics.DbAnalysis(createDatabaseMatcher.group(1), false);
 			createDbLogMap.put(LogManagementService.DB_CHANGE_KEY, "Failed to create database. 0 row(s) affected.");
 			LogManagementService.getInstance().writeLog(createDbLogMap);
 		}
@@ -123,7 +132,7 @@ public class QueryParser {
 	}
 
 	public boolean useDatabase(Matcher useDatabaseMatcher) {
-		Map<String, String> useDbLogMap = new HashMap<String,String>();
+		Map<String, String> useDbLogMap = new HashMap<String, String>();
 		long queryStartTime = System.nanoTime();
 		boolean status = dbOperation.useDb(useDatabaseMatcher.group(1));
 
@@ -131,23 +140,25 @@ public class QueryParser {
 		long executionTime = queryEndTime - queryStartTime;
 		if (status) {
 
-			analytics.DbAnalysis(useDatabaseMatcher.group(1),true);
+			analytics.DbAnalysis(useDatabaseMatcher.group(1), true);
 
 			System.out.println(analytics.DBqueries);
 
-			useDbLogMap.put(LogManagementService.DB_CHANGE_KEY, "Currently using " + useDatabaseMatcher.group(1) + ". 0 row(s) affected.");
+			useDbLogMap.put(LogManagementService.DB_CHANGE_KEY,
+					"Currently using " + useDatabaseMatcher.group(1) + ". 0 row(s) affected.");
 			LogManagementService.getInstance().writeLog(useDbLogMap);
 			System.out.println("Switched the database");
 		} else {
 
-			analytics.DbAnalysis(useDatabaseMatcher.group(1),false);
+			analytics.DbAnalysis(useDatabaseMatcher.group(1), false);
 			System.out.println(analytics.DBqueries);
 
-			useDbLogMap.put(LogManagementService.DB_CHANGE_KEY, useDatabaseMatcher.group(1) + "' database is not available. 0 row(s) affected.");
+			useDbLogMap.put(LogManagementService.DB_CHANGE_KEY,
+					useDatabaseMatcher.group(1) + "' database is not available. 0 row(s) affected.");
 			LogManagementService.getInstance().writeLog(useDbLogMap);
 			System.out.println("'" + useDatabaseMatcher.group(1) + "' database is not available.");
 		}
-		
+
 		useDbLogMap.put(LogManagementService.DB_STATE_KEY, "Total tables: ");
 		useDbLogMap.put(LogManagementService.EXECUTION_TIME_KEY, "Execution time: " + executionTime);
 		LogManagementService.getInstance().writeLog(useDbLogMap);
@@ -156,7 +167,7 @@ public class QueryParser {
 
 	public boolean createTable(Matcher createMatcher) {
 		HashMap<String, String> keySet = new HashMap<>();
-		Map<String,String> createTableLogMap = new HashMap<String,String>();
+		Map<String, String> createTableLogMap = new HashMap<String, String>();
 		String tableName = createMatcher.group(1);
 		String tableSet = createMatcher.group(2);
 		String[] colValSet = tableSet.split(",");
@@ -179,22 +190,25 @@ public class QueryParser {
 		TableOperation tableOperation = new TableOperation();
 		if (dbOperation.getCurrentDatabase() != null) {
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.createTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, values,
+			boolean status = tableOperation.createTableOperation(dbOperation.getCurrentDatabase(), tableName, columns,
+					values,
 					keySet);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
 			if (status) {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), true);
 
-				createTableLogMap.put(LogManagementService.DB_CHANGE_KEY, tableName + " table created in database. 0 row(s) affected.");
+				createTableLogMap.put(LogManagementService.DB_CHANGE_KEY,
+						tableName + " table created in database. 0 row(s) affected.");
 				LogManagementService.getInstance().writeLog(createTableLogMap);
 				System.out.println("Successfully creation of new table: " + tableName + " in database: "
 						+ dbOperation.getCurrentDatabase());
 			} else {
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
-				createTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Failed to create table " + tableName + ". 0 row(s) affected.");
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), false);
+				createTableLogMap.put(LogManagementService.DB_CHANGE_KEY,
+						"Failed to create table " + tableName + ". 0 row(s) affected.");
 				LogManagementService.getInstance().writeLog(createTableLogMap);
 				System.out.println("Failure creation of new table: " + tableName + " in database: "
 						+ dbOperation.getCurrentDatabase());
@@ -222,17 +236,18 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.insertTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, values);
+			boolean status = tableOperation.insertTableOperation(dbOperation.getCurrentDatabase(), tableName, columns,
+					values);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
 			if (status) {
-				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,true,true);
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(), tableName, true, true);
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), true);
 				System.out.println("Successfully inserted into the table");
 			} else {
-				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,true,false);
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(), tableName, true, false);
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), false);
 				System.out.println("Failure insertion of new entry in: " + tableName + " table");
 			}
 			return status;
@@ -243,7 +258,7 @@ public class QueryParser {
 	}
 
 	public boolean selectTable(Matcher selectMatcher) {
-		Map<String, String> selectTableLogMap = new HashMap<String,String>();
+		Map<String, String> selectTableLogMap = new HashMap<String, String>();
 		String tableName = selectMatcher.group(8);
 		String tableSet = selectMatcher.group(1);
 		String[] colValSet = tableSet.split(",");
@@ -254,19 +269,20 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			int status = tableOperation.selectTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, conditionColumns,
+			int status = tableOperation.selectTableOperation(dbOperation.getCurrentDatabase(), tableName, columns,
+					conditionColumns,
 					conditionValues);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
 			if (status > 0) {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), true);
 				selectTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Rows affected: " + status);
 				LogManagementService.getInstance().writeLog(selectTableLogMap);
 				System.out.println("Successfully performed select query on the " + tableName + " table");
 			} else {
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), false);
 				System.out.println("Failure to perform selection query on the " + tableName + " table");
 				selectTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Selection query not performed");
 				LogManagementService.getInstance().writeLog(selectTableLogMap);
@@ -282,7 +298,7 @@ public class QueryParser {
 	}
 
 	public boolean updateTable(Matcher updateMatcher) {
-		Map<String, String> updateTableLogMap = new HashMap<String,String>();
+		Map<String, String> updateTableLogMap = new HashMap<String, String>();
 		String tableName = updateMatcher.group(1);
 		String tableSet = updateMatcher.group(2);
 		String conditionSet = updateMatcher.group(10);
@@ -304,25 +320,27 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			int status = tableOperation.updateTableOperation(dbOperation.getCurrentDatabase(), tableName, columns, values,
+			int status = tableOperation.updateTableOperation(dbOperation.getCurrentDatabase(), tableName, columns,
+					values,
 					conditionColumns, conditionValues);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
 			System.out.println("status===" + status);
 			if (status > 0) {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), true);
 
-				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,false,true);
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(), tableName, false, true);
 
-				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Update successful. Rows affected: " + status);
+				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY,
+						"Update successful. Rows affected: " + status);
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Successfully updated into the table");
 			} else {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
-				analytics.tableAnalytics(dbOperation.getCurrentDatabase(),tableName,false,false);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), false);
+				analytics.tableAnalytics(dbOperation.getCurrentDatabase(), tableName, false, false);
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Update failed. Rows affected: 0");
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Failure updating of new entry in: " + tableName + " table");
@@ -338,7 +356,7 @@ public class QueryParser {
 	}
 
 	public boolean deleteTable(Matcher deleMatcher) {
-		Map<String, String> updateTableLogMap = new HashMap<String,String>();
+		Map<String, String> updateTableLogMap = new HashMap<String, String>();
 		System.out.println("count===" + deleMatcher.groupCount());
 		String tableName = deleMatcher.group(1);
 		String conditionColumn = deleMatcher.group(3);
@@ -347,20 +365,21 @@ public class QueryParser {
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
-			boolean status = tableOperation.deleteTableOperation(dbOperation.getCurrentDatabase(), tableName, conditionColumn,
+			boolean status = tableOperation.deleteTableOperation(dbOperation.getCurrentDatabase(), tableName,
+					conditionColumn,
 					conditionValue);
 			long queryEndTime = System.nanoTime();
 			long executionTime = queryEndTime - queryStartTime;
 
 			if (status) {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), true);
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Deleted row. 1 row(s) affected.");
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Successfully deleted entry from the table");
 			} else {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), false);
 				updateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Deletion failed. 0 row(s) affected.");
 				LogManagementService.getInstance().writeLog(updateTableLogMap);
 				System.out.println("Failure deleting of new entry in: " + tableName + " table");
@@ -377,7 +396,7 @@ public class QueryParser {
 
 	public boolean truncateTable(Matcher truncateMatcher) {
 		String tableName = truncateMatcher.group(1);
-		Map<String,String> truncateTableLogMap = new HashMap<String,String>();
+		Map<String, String> truncateTableLogMap = new HashMap<String, String>();
 		if (dbOperation.getCurrentDatabase() != null) {
 			TableOperation tableOperation = new TableOperation();
 			long queryStartTime = System.nanoTime();
@@ -391,7 +410,8 @@ public class QueryParser {
 				LogManagementService.getInstance().writeLog(truncateTableLogMap);
 				System.out.println("Successfully truncated the " + tableName + " table");
 			} else {
-				truncateTableLogMap.put(LogManagementService.DB_CHANGE_KEY, "Failed to truncate " + tableName + " table!");
+				truncateTableLogMap.put(LogManagementService.DB_CHANGE_KEY,
+						"Failed to truncate " + tableName + " table!");
 				LogManagementService.getInstance().writeLog(truncateTableLogMap);
 				System.out.println("Failure to truncate the : " + tableName + " table");
 			}
@@ -407,7 +427,7 @@ public class QueryParser {
 	}
 
 	public boolean dropTable(Matcher dropMatcher) {
-		Map<String,String> dropTableLogMap = new HashMap<String,String>();
+		Map<String, String> dropTableLogMap = new HashMap<String, String>();
 		String tableName = dropMatcher.group(1);
 
 		if (dbOperation.getCurrentDatabase() != null) {
@@ -418,14 +438,14 @@ public class QueryParser {
 			long executionTime = queryEndTime - queryStartTime;
 
 			if (status) {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),true);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), true);
 				dropTableLogMap.put(LogManagementService.DB_CHANGE_KEY, tableName + " table dropped !");
 				LogManagementService.getInstance().writeLog(dropTableLogMap);
 				System.out.println("Successfully dropped the table");
 			} else {
-				//databse queries
-				analytics.DbAnalysis(dbOperation.getCurrentDatabase(),false);
+				// databse queries
+				analytics.DbAnalysis(dbOperation.getCurrentDatabase(), false);
 				dropTableLogMap.put(LogManagementService.DB_CHANGE_KEY, tableName + " table failed to drop !");
 				LogManagementService.getInstance().writeLog(dropTableLogMap);
 				System.out.println("Failure to drop the " + tableName + " table");
