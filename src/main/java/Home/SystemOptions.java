@@ -37,7 +37,7 @@ public class SystemOptions {
                     if (login) {
                         System.out.println("User logged in");
                         activeUser = loginUser.LoginUser;
-                        QueryOptions options = new QueryOptions();
+                        QueryOptions options = new QueryOptions(activeUser);
                         options.listQueryOptions();
                     } else {
                         System.out.println("Please enter valid username or password");
