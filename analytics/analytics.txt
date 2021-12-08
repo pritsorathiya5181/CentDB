@@ -1,9 +1,15 @@
-Total databases in the system : 1
+Total databases in the system : 2
 ===============================================
 
 DB:: db1 (total tables in the database-> 2):
      |
      |->person.txt
+         |
+         |-> total records: 4
+
+DB:: db2 (total tables in the database-> 1):
+     |
+     |->student_information.txt
          |
          |-> total records: 2
 

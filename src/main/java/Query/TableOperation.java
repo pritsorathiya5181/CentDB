@@ -165,7 +165,7 @@ public class TableOperation {
             if (conditionColumns != null) {
                 ArrayList<String> col = records.get(conditionColumns);
                 for (int i = 0; i < col.size(); i++) {
-                    if (col.get(i).equals(conditionValues)) {
+                    if (col.get(i).equals(conditionValues) || col.get(i).equals(clmValues)) {
                         presentIn.add(i);
                     }
                 }
@@ -219,7 +219,7 @@ public class TableOperation {
                 ArrayList<String> col = records.get(conditionColumns);
                 for (int i = 0; i < col.size(); i++) {
                     String colVal = col.get(i).replace("\"", "");
-                    if (colVal.equals(conditionValues)) {
+                    if (colVal.equals(conditionValues) || colVal.equals(clmValues)) {
                         presentIn.add(i);
                     }
                 }
@@ -272,24 +272,14 @@ public class TableOperation {
             FileWriter writer = new FileWriter(tableFile, false);
             ArrayList<String> temp;
             System.out.println("records==" + records + "en==" + records.keySet());
-//            for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
-//                System.out.println("eee==="+ee);
-//                boolean hasKey = ee.getKey().equals(conditionColumns);
-//                boolean hasValue = ee.getValue().contains(conditionValues);
-//                System.out.println("eee==="+hasValue+"==="+hasKey);
-//                if (!(hasKey && hasValue)) {
-//                    String record = ee.getKey() + " " + ee.getValue().get(i) + "\n";
-//                    writer.write(record);
-//                    writer.flush();
-//                }
-//            }
+
             Set<String> columnList = records.keySet();
 //            System.out.println(columnList.toArray()[0]);
             for (int i = 0; i < records.get(columnList.toArray()[0]).size(); i++) {
                 String record = "";
                 for (Map.Entry<String, ArrayList<String>> ee : records.entrySet()) {
                     boolean hasKey = ee.getKey().equals(conditionColumns);
-                    boolean hasValue = ee.getValue().get(i).equals(conditionValues);
+                    boolean hasValue = ee.getValue().get(i).equals(conditionValues) || ee.getValue().get(i).equals(clmValues);
 
                     if (!(hasKey && hasValue)) {
                         record += ee.getKey() + " " + ee.getValue().get(i) + "\n";
@@ -381,63 +371,6 @@ public class TableOperation {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public boolean erd(String databaseName) throws IOException {
-        HashMap<String, ArrayList<String>> list = new HashMap<String, ArrayList<String>>();
-
-        File dataDict = new File(fileLocation.LOCAL_PATH + "/" + databaseName + "/dataDictionary.txt");
-
-        if (!dataDict.exists()) {
-            System.out.println("Database doesn't exists");
-            return false;
-        }
-        Scanner myReader = new Scanner(dataDict);
-
-        ArrayList<String> data = new ArrayList<String>();
-        int count = 0;
-        String table = null;
-
-        while (myReader.hasNextLine()) {
-            String st = myReader.nextLine();
-            if (st.length() > 0) {
-                if (count == 0) {
-                    table = st;
-                    count = count + 1;
-                } else {
-                    String[] details = st.split("\s");
-                    boolean isPrimary = details.length == 3;
-                    boolean isForeign = details.length == 6;
-                    if (isPrimary) {
-                        data.add("\033[4m" + details[0] +
-                                "\033[0m" + " " + details[1]);
-                    } else if (isForeign) {
-                        data.add("\033[0;1m" + details[0] + "\033[0;0m" + " " + details[1]);
-                    } else {
-                        data.add(details[0] + " " + details[1]);
-                    }
-                }
-                list.put(table, data);
-            } else {
-                list.put(table, data);
-                count = 0;
-                data = new ArrayList<String>();
-            }
-        }
-        System.out.println("list===" + list + "---" + data);
-        System.out.println("\n*********************************************************************************");
-        System.out.println("*                                ER DIAGRAM                                     *");
-        System.out.println("*********************************************************************************");
-        System.out.println("Table" + "\t\t\t" + "| " + "Columns");
-        System.out.println("---------------------------------------------------------------------------------");
-        for (String key : list.keySet()) {
-            System.out.print(key + "\t\t\t" + "| ");
-            for (String c : list.get(key)) {
-                System.out.print(c + "\t\t" + "| ");
-            }
-            System.out.println("\n---------------------------------------------------------------------------------");
-        }
-        return true;
     }
 }
 
