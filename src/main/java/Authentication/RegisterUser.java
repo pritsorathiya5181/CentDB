@@ -70,6 +70,11 @@ public class RegisterUser {
             return false;
         }
 
+        return doRegistration(email, username, password, securityQuestion, answer);
+    }
+
+
+    public boolean doRegistration(String email, String username, String password, String securityQuestion, String answer) throws NoSuchAlgorithmException {
         File myFile = new File(fileLocation.USER_CREDENTIAL_PATH);
         final String hashedPassword = HashAlgorithm.toHexString(HashAlgorithm.getSHA(password));
         RegisteringUser.setPassword(hashedPassword);
@@ -91,7 +96,7 @@ public class RegisterUser {
                 fw = new FileWriter(fileLocation.USER_CREDENTIAL_PATH, true);
             }
 
-            String toBeWritten = String.format("%s;%s;%s;%s;%s\n",username,email,securityQuestion,answer,hashedPassword);
+            String toBeWritten = String.format("%s;%s;%s;%s;%s\n", username, email, securityQuestion, answer,hashedPassword);
             fw.write(toBeWritten);
             fw.close();
 

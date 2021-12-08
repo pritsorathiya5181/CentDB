@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class LoginUser {
     public UserModel LoginUser = new UserModel();
+
     public boolean login() throws FileNotFoundException, NoSuchAlgorithmException {
         Scanner sc = new Scanner(System.in);
 
@@ -19,36 +20,40 @@ public class LoginUser {
         String password = sc.next();
 
 
-
         File myFile = new File(fileLocation.USER_CREDENTIAL_PATH);
         Scanner fileReader = new Scanner(myFile);
-        while (fileReader.hasNextLine()){
+        while (fileReader.hasNextLine()) {
             String data = fileReader.nextLine();
-            String [] userMeta = data.split(";");
+            String[] userMeta = data.split(";");
 
-            if(username.equals(userMeta[0])) {
+            if (username.equals(userMeta[0])) {
 
                 System.out.println("Answer your security question");
                 System.out.println(userMeta[2]);
                 String givenAnswer = sc.next();
-                final String hashedPassword = HashAlgorithm.toHexString(HashAlgorithm.getSHA(password));
-                final String rightAnswer = userMeta[3];
-
-                if(hashedPassword.equals(userMeta[4]) && givenAnswer.equals(rightAnswer)){
-                    LoginUser.setUsername(userMeta[0]);
-                    LoginUser.setEmail(userMeta[1]);
-                    LoginUser.setSecurityQuestion(userMeta[2]);
-                    LoginUser.setSecurityAnswer(userMeta[3]);
-                    LoginUser.setPassword(userMeta[4]);
-
-                    return true;
-                }
+                if (doLogin(password, userMeta, givenAnswer)) return true;
 
             }
         }
 
 //        this.LoginUser = new UserModel(username,password,"email","dummy security","dummy answer");
 
+        return false;
+    }
+
+    private boolean doLogin(String password, String[] userMeta, String givenAnswer) throws NoSuchAlgorithmException {
+        final String hashedPassword = HashAlgorithm.toHexString(HashAlgorithm.getSHA(password));
+        final String rightAnswer = userMeta[3];
+
+        if (hashedPassword.equals(userMeta[4]) && givenAnswer.equals(rightAnswer)) {
+            LoginUser.setUsername(userMeta[0]);
+            LoginUser.setEmail(userMeta[1]);
+            LoginUser.setSecurityQuestion(userMeta[2]);
+            LoginUser.setSecurityAnswer(userMeta[3]);
+            LoginUser.setPassword(userMeta[4]);
+
+            return true;
+        }
         return false;
     }
 }

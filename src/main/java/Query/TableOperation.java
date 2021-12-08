@@ -135,6 +135,7 @@ public class TableOperation {
             while (myReader.hasNextLine()) {
                 String tableDef = myReader.nextLine();
                 if (tableDef.contains(tableName)) {
+                    tableDef = myReader.nextLine();
                     if (tableDef.contains("PK")) {
                         String[] tableStr = tableDef.split(" ");
                         int pkPos = Arrays.stream(tableStr).toList().indexOf("PK");
